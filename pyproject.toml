@@ -1,0 +1,3 @@
+[tool.pytest.ini_options]
+# During testing automatically adds scr-directory to import paths
+pythonpath = ["src"]

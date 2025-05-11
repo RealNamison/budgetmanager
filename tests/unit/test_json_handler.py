@@ -11,8 +11,8 @@ import pytest
 from pathlib import Path
 
 from budgetmanager import config
-from budgetmanager.file.json_handler import JSONHandler  # json_handler.py unter src/file/ :contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}
-from budgetmanager.file import FileHandler   # file_handler.py unter src/file/ :contentReference[oaicite:2]{index=2}
+from budgetmanager.file.json_handler import JSONHandler
+from budgetmanager.file.file_handler import FileHandler
 
 
 def test_save_json_relative(tmp_path, monkeypatch):

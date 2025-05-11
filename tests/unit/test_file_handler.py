@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from budgetmanager import config
-from budgetmanager.file import FileHandler
+from budgetmanager.file.file_handler import FileHandler
 
 
 def test_create_directory_absolute(tmp_path: Path):
@@ -132,9 +132,9 @@ def test_create_directory_nested(tmp_path: Path, monkeypatch):
 # noinspection PyUnusedLocal
 def test_create_file_idempotent(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "DATA_ROOT", tmp_path)
-    path1 = FileHandler.create_file("dir", "budgetmanager/file", "txt")
+    path1 = FileHandler.create_file("dir", "file", "txt")
     ts1 = path1.stat().st_mtime
-    path2 = FileHandler.create_file("dir", "budgetmanager/file", "txt")
+    path2 = FileHandler.create_file("dir", "file", "txt")
     ts2 = path2.stat().st_mtime
     assert path1 == path2
     assert path1.exists()

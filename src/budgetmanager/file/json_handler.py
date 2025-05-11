@@ -11,7 +11,7 @@ import json
 from typing import Any
 from pathlib import Path
 
-from budgetmanager.file.file_handler import FileHandler
+from .file_handler import FileHandler
 
 
 class JSONHandler:

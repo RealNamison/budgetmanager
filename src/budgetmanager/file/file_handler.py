@@ -10,7 +10,8 @@ anchored in a configurable data root directory.
 
 from pathlib import Path
 import re
-from budgetmanager import config
+
+from .. import config
 
 
 class FileHandler:

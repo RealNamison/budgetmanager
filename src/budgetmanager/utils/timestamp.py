@@ -9,6 +9,7 @@ to datetime and float timestamp, and comparison operations.
 """
 
 from __future__ import annotations
+
 from datetime import date, time, datetime
 from functools import total_ordering
 
