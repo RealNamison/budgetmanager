@@ -1,0 +1,33 @@
+BudgetManager/
+├── data/
+│   ├── processed/
+│   └── raw/
+├── docs/
+│   └── index.md
+├── examples/
+│   ├── quickstart.ipynb
+│   └── advanced_usage.py
+├── src/
+│   └── budgetmanager/
+│       ├── file/
+│       │   ├── __init__.py
+│       │   ├── file_handler.py
+│       │   └── json_handler.py
+│       ├── utils/
+│       │   ├── __init__.py
+│       │   └── timestamp.py
+│       ├── __init__.py
+│       └── config.py
+├── tests/
+│   ├── integration/				
+│   ├── unit/
+│   │   ├── __init__.py
+│   │   ├── test_file_handler.py
+│   │   ├── test_json_handler.py
+│   │   └── test_timestamp.py
+│   └── conftest.py
+├── LICENSE
+├── mkdocs.yml
+├── pyproject.toml
+├── README.md
+└── tox.ini
