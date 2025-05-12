@@ -25,7 +25,7 @@ BudgetManager/
 │   │   ├── __init__.py
 │   │   ├── test_file_handler.py
 │   │   ├── test_json_handler.py
-│   │   └── test_timestamp.py
+│   │   ├── test_timestamp.py
 │   │   └── test_transaction.py
 │   └── conftest.py
 ├── LICENSE

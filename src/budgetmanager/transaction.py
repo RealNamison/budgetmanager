@@ -9,12 +9,10 @@ financial transaction with timestamp, category, amount and description.
 from __future__ import annotations
 from decimal import Decimal, InvalidOperation
 from typing import Union, Any
-from functools import total_ordering
 
 from .utils.timestamp import Timestamp
 
 
-@total_ordering
 class Transaction:
     """Represents a financial transaction.
 
@@ -71,7 +69,7 @@ class Transaction:
     def __hash__(self) -> int:
         """Compute hash based on all immutable attributes."""
         return hash((
-            self.timestamp,
+            self.timestamp.to_isoformat(),
             self.category,
             self.amount,
             self.description,
@@ -88,11 +86,29 @@ class Transaction:
             self.description == other.description
         )
 
-    def __lt__(self, other: Transaction) -> bool:
-        """Return True if this transaction is earlier than `other`."""
+    def __lt__(self, other: object) -> bool:
+        """Amount-based less-than comparison."""
         if not isinstance(other, Transaction):
             return NotImplemented
         return self.amount < other.amount
+
+    def __le__(self, other: object) -> bool:
+        """Amount-based less-or-equal comparison."""
+        if not isinstance(other, Transaction):
+            return NotImplemented
+        return self.amount <= other.amount
+
+    def __gt__(self, other: object) -> bool:
+        """Amount-based greater-than comparison."""
+        if not isinstance(other, Transaction):
+            return NotImplemented
+        return self.amount > other.amount
+
+    def __ge__(self, other: object) -> bool:
+        """Amount-based greater-or-equal comparison."""
+        if not isinstance(other, Transaction):
+            return NotImplemented
+        return self.amount >= other.amount
 
     def __add__(self, other: Any) -> Decimal:
         """Add Transaction or scalar to this transaction's amount.
