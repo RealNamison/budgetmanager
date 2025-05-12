@@ -9,7 +9,6 @@ to datetime and float timestamp, and comparison operations.
 """
 
 from __future__ import annotations
-
 from datetime import date, time, datetime
 from functools import total_ordering
 
@@ -175,6 +174,15 @@ class Timestamp:
         """
         return datetime.combine(self.date, self.time)
 
+    def to_isoformat(self) -> str:
+        """
+        Returns the ISO 8601 string representation of this Timestamp.
+
+        Returns:
+            str: The timestamp as an ISO formatted string.
+        """
+        return self.to_datetime().isoformat()
+
     def __float__(self) -> float:
         """
         Returns the POSIX timestamp (seconds since epoch) of this Timestamp.
@@ -191,7 +199,7 @@ class Timestamp:
         Returns:
             str: The timestamp as an ISO formatted string.
         """
-        return self.to_datetime().isoformat()
+        return self.to_isoformat()
 
     def __repr__(self) -> str:
         """

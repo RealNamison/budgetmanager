@@ -17,7 +17,8 @@ BudgetManager/
 │       │   ├── __init__.py
 │       │   └── timestamp.py
 │       ├── __init__.py
-│       └── config.py
+│       ├── config.py
+│       └── transaction.py
 ├── tests/
 │   ├── integration/				
 │   ├── unit/
@@ -25,6 +26,7 @@ BudgetManager/
 │   │   ├── test_file_handler.py
 │   │   ├── test_json_handler.py
 │   │   └── test_timestamp.py
+│   │   └── test_transaction.py
 │   └── conftest.py
 ├── LICENSE
 ├── mkdocs.yml
