@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="forced python version &gt;= 3.10" />
+    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="template_python.py (minor change to 3.10)">
+      <change beforePath="$PROJECT_DIR$/docs/chatgpt_guidelines.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/chatgpt_guidelines.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -127,7 +129,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747136031334</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="template_python.py (minor change to 3.10)">
+      <option name="closed" value="true" />
+      <created>1747136311044</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1747136311044</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -150,6 +160,7 @@
     <MESSAGE value="added ledger.py v.0.1 (untested)" />
     <MESSAGE value="added ledger.py v.0.1.1 (tested)" />
     <MESSAGE value="forced python version &gt;= 3.10" />
-    <option name="LAST_COMMIT_MESSAGE" value="forced python version &gt;= 3.10" />
+    <MESSAGE value="template_python.py (minor change to 3.10)" />
+    <option name="LAST_COMMIT_MESSAGE" value="template_python.py (minor change to 3.10)" />
   </component>
 </project>
