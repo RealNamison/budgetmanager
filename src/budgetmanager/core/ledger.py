@@ -14,7 +14,7 @@ from typing import Iterator
 from copy import deepcopy
 
 from .transaction import Transaction
-from .utils.timestamp import Timestamp
+from ..utils.timestamp import Timestamp
 
 
 class Ledger:

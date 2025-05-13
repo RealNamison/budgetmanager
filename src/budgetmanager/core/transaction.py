@@ -11,7 +11,7 @@ from __future__ import annotations
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
-from .utils.timestamp import Timestamp
+from ..utils.timestamp import Timestamp
 
 
 class Transaction:

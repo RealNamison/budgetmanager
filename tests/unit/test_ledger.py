@@ -12,8 +12,8 @@ import pytest
 from decimal import Decimal
 from copy import copy, deepcopy
 
-from budgetmanager.ledger import Ledger
-from budgetmanager.transaction import Transaction
+from budgetmanager.core.ledger import Ledger
+from budgetmanager.core.transaction import Transaction
 from budgetmanager.utils.timestamp import Timestamp
 
 

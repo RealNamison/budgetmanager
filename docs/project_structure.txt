@@ -9,6 +9,10 @@ BudgetManager/
 │   └── advanced_usage.py
 ├── src/
 │   └── budgetmanager/
+│       ├── core/
+│       │   ├── __init__.py
+│       │   ├── ledger.py
+│       │   └── transaction.py
 │       ├── file/
 │       │   ├── __init__.py
 │       │   ├── file_handler.py
@@ -17,9 +21,7 @@ BudgetManager/
 │       │   ├── __init__.py
 │       │   └── timestamp.py
 │       ├── __init__.py
-│       ├── config.py
-│       ├── ledger.py
-│       └── transaction.py
+│       └── config.py
 ├── tests/
 │   ├── integration/				
 │   ├── unit/

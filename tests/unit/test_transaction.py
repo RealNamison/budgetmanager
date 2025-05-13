@@ -7,7 +7,7 @@ Unit tests for the Transaction class in budgetmanager.transaction.
 import pytest
 from decimal import Decimal
 
-from budgetmanager.transaction import Transaction
+from budgetmanager.core.transaction import Transaction
 from budgetmanager.utils.timestamp import Timestamp
 
 
