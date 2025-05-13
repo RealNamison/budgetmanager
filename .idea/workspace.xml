@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="chatgpt_guidelines.txt updated">
+    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="created core sub-package,&#10;moved transaction.py and ledger.py to core">
+      <change afterPath="$PROJECT_DIR$/src/budgetmanager/cli/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/budgetmanager/cli/cli.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/budgetmanager/ledger.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/budgetmanager/ledger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/unit/test_ledger.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/unit/test_ledger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/project_structure.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/project_structure.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +50,7 @@
       <recent name="C:\Users\yanis\PycharmProjects\BudgetManager" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\yanis\PycharmProjects\BudgetManager\src\budgetmanager\core" />
       <recent name="C:\Users\yanis\PycharmProjects\BudgetManager\docs" />
     </key>
   </component>
@@ -147,7 +150,31 @@
       <option name="project" value="LOCAL" />
       <updated>1747136756349</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="added ledger.py v.0.1.1a (tested)">
+      <option name="closed" value="true" />
+      <created>1747147600605</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1747147600605</updated>
+    </task>
+    <task id="LOCAL-00012" summary="created core sub-package,&#10;moved transaction.py and ledger.py to core">
+      <option name="closed" value="true" />
+      <created>1747148072433</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1747148072433</updated>
+    </task>
+    <task id="LOCAL-00013" summary="created core sub-package,&#10;moved transaction.py and ledger.py to core">
+      <option name="closed" value="true" />
+      <created>1747148168628</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1747148168628</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -172,6 +199,8 @@
     <MESSAGE value="forced python version &gt;= 3.10" />
     <MESSAGE value="template_python.py (minor change to 3.10)" />
     <MESSAGE value="chatgpt_guidelines.txt updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="chatgpt_guidelines.txt updated" />
+    <MESSAGE value="added ledger.py v.0.1.1a (tested)" />
+    <MESSAGE value="created core sub-package,&#10;moved transaction.py and ledger.py to core" />
+    <option name="LAST_COMMIT_MESSAGE" value="created core sub-package,&#10;moved transaction.py and ledger.py to core" />
   </component>
 </project>

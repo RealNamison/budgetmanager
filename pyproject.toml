@@ -1,6 +1,33 @@
-[tool.poetry.dependencies]
-python = ">=3.10"
+# ─────────────────────────────────────────────────────────────────────────────
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+# ─────────────────────────────────────────────────────────────────────────────
+
+[project]
+name = "budgetmanager"
+version = "0.1.0"
+description = "A simple budget managing CLI application."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Yanis", email = "yanis@example.com" }
+]
+dependencies = []
+
+[project.scripts]
+budgetmgr = "budgetmanager.cli.cli:main"
+# ─────────────────────────────────────────────────────────────────────────────
+
+[tool.setuptools]
+# lege fest, dass dein Paket im src-Ordner liegt
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+# ─────────────────────────────────────────────────────────────────────────────
 
 [tool.pytest.ini_options]
-# During testing automatically adds scr-directory to import paths
+# für Tests: src ins PYTHONPATH nehmen
 pythonpath = ["src"]
+# ─────────────────────────────────────────────────────────────────────────────
