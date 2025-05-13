@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="template_python.py (minor change to 3.10)">
-      <change beforePath="$PROJECT_DIR$/docs/chatgpt_guidelines.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/chatgpt_guidelines.txt" afterDir="false" />
+    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="chatgpt_guidelines.txt updated">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/budgetmanager/ledger.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/budgetmanager/ledger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/unit/test_ledger.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/unit/test_ledger.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747136311044</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="chatgpt_guidelines.txt updated">
+      <option name="closed" value="true" />
+      <created>1747136756349</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1747136756349</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -161,6 +171,7 @@
     <MESSAGE value="added ledger.py v.0.1.1 (tested)" />
     <MESSAGE value="forced python version &gt;= 3.10" />
     <MESSAGE value="template_python.py (minor change to 3.10)" />
-    <option name="LAST_COMMIT_MESSAGE" value="template_python.py (minor change to 3.10)" />
+    <MESSAGE value="chatgpt_guidelines.txt updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="chatgpt_guidelines.txt updated" />
   </component>
 </project>

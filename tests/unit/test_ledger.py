@@ -145,6 +145,57 @@ def test_filter_by_category_and_date_range(sample_transactions):
     assert all(start <= t.timestamp <= end for t in ranged)
 
 
+def test_to_dict_and_from_dict_roundtrip(sample_transactions):
+    """
+    Test that to_dict() produces the expected dict structure and that
+    from_dict() reconstructs an equivalent Ledger.
+    """
+    ledger = Ledger(sample_transactions)
+    data = ledger.to_dict()
+
+    # verify structure
+    assert isinstance(data, dict)
+    assert "transactions" in data
+    assert isinstance(data["transactions"], list)
+    expected = [tx.to_dict() for tx in sample_transactions]
+    assert data["transactions"] == expected
+
+    # round-trip
+    new_ledger = Ledger.from_dict(data)
+    assert isinstance(new_ledger, Ledger)
+    assert new_ledger == ledger
+    assert new_ledger is not ledger
+    for orig, fresh in zip(ledger.transactions, new_ledger.transactions):
+        assert fresh == orig
+        assert fresh is not orig
+
+
+def test_from_dict_missing_key_raises_key_error():
+    """
+    Test that from_dict() raises KeyError when the 'transactions' key is missing.
+    """
+    with pytest.raises(KeyError):
+        Ledger.from_dict({})
+
+
+# noinspection PyTypeChecker
+def test_from_dict_transactions_not_list_raises_type_error():
+    """
+    Test that from_dict() raises TypeError when 'transactions' is not a list.
+    """
+    with pytest.raises(TypeError):
+        Ledger.from_dict({"transactions": "not a list"})
+
+
+def test_from_dict_invalid_transaction_data_raises_value_error():
+    """
+    Test that from_dict() raises ValueError when a transaction dict is invalid.
+    """
+    bad_payload = {"transactions": [{"foo": "bar"}]}
+    with pytest.raises(ValueError):
+        Ledger.from_dict(bad_payload)
+
+
 def test_iter_and_indexing_and_slice(sample_transactions):
     """
     Test __iter__, __getitem__ for index, and __getitem__ for slice.

@@ -150,6 +150,59 @@ class Ledger:
             if start <= t.timestamp <= end
         ]
 
+    def to_dict(self) -> dict[str, list[dict]]:
+        """
+        Serialize the ledger to a dictionary suitable for JSON encoding.
+
+        Returns:
+            dict[str, list[dict]]: A dictionary with a "transactions" key mapping
+                to a list of transaction dictionaries.
+
+        Examples:
+            >>> data = ledger.to_dict()
+        """
+        return {"transactions": [tx.to_dict() for tx in self.transactions]}
+
+    @classmethod
+    def from_dict(cls, data: dict[str, list[dict]]) -> Ledger:
+        """
+        Create a Ledger instance from a dictionary produced by to_dict().
+
+        Args:
+            data (dict[str, list[dict]]): Dictionary with a "transactions" key
+                containing a list of transaction dictionaries.
+
+        Returns:
+            Ledger: A new Ledger instance populated with Transaction objects.
+
+        Raises:
+            KeyError: If the "transactions" key is missing.
+            TypeError: If the "transactions" value is not a list.
+            ValueError: If any transaction dictionary is invalid.
+
+        Examples:
+            >>> ledger = Ledger.from_dict(data)
+        """
+        try:
+            tx_dicts = data["transactions"]
+        except KeyError as e:
+            raise KeyError("Missing 'transactions' in data") from e
+
+        if not isinstance(tx_dicts, list):
+            raise TypeError(
+                f"'transactions' must be a list, got {type(tx_dicts).__name__}"
+            )
+
+        transactions: list[Transaction] = []
+        for tx_data in tx_dicts:
+            try:
+                tx = Transaction.from_dict(tx_data)
+            except Exception as e:
+                raise ValueError(f"Invalid transaction data: {tx_data}") from e
+            transactions.append(tx)
+
+        return cls(transactions)
+
     def __len__(self) -> int:
         """
         Return the number of transactions in the ledger.
