@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.10
 # -*- coding: utf-8 -*-
 """
 Unit tests for the Transaction class in budgetmanager.transaction.

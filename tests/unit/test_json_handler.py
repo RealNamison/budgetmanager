@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.10
 # -*- coding: utf-8 -*-
-
 """
 Test module for JSONHandler: covers saving and loading JSON files
 under DATA_ROOT and via absolute paths, plus alle relevanten Fehlerfälle.

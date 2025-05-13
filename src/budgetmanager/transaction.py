@@ -1,6 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.10
 # -*- coding: utf-8 -*-
-"""Transaction model for budget entries.
+"""
+Transaction module for budget entries.
 
 This module defines the `Transaction` class, which represents a single
 financial transaction with timestamp, category, amount and description.
