@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="added transaction.py v.0.1.1 (tested)">
-      <change afterPath="$PROJECT_DIR$/src/budgetmanager/ledger.py" afterDir="false" />
+    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="added ledger.py v.0.1 (untested)">
+      <change afterPath="$PROJECT_DIR$/tests/unit/test_ledger.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/project_structure.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/project_structure.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/budgetmanager/ledger.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/budgetmanager/ledger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/budgetmanager/transaction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/budgetmanager/transaction.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +110,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747060409310</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added ledger.py v.0.1 (untested)">
+      <option name="closed" value="true" />
+      <created>1747131234353</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1747131234353</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -127,6 +138,7 @@
     <MESSAGE value="added ChatGPT guidelines to docs" />
     <MESSAGE value="added transaction.py v.0.1 (untested)" />
     <MESSAGE value="added transaction.py v.0.1.1 (tested)" />
-    <option name="LAST_COMMIT_MESSAGE" value="added transaction.py v.0.1.1 (tested)" />
+    <MESSAGE value="added ledger.py v.0.1 (untested)" />
+    <option name="LAST_COMMIT_MESSAGE" value="added ledger.py v.0.1 (untested)" />
   </component>
 </project>

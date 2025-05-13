@@ -1,3 +1,6 @@
+[tool.poetry.dependencies]
+python = ">=3.10"
+
 [tool.pytest.ini_options]
 # During testing automatically adds scr-directory to import paths
 pythonpath = ["src"]

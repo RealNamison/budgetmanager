@@ -8,7 +8,7 @@ financial transaction with timestamp, category, amount and description.
 
 from __future__ import annotations
 from decimal import Decimal, InvalidOperation
-from typing import Union, Any
+from typing import Any
 
 from .utils.timestamp import Timestamp
 
