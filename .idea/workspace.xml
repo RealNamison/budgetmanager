@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="created core sub-package,&#10;moved transaction.py and ledger.py to core">
-      <change afterPath="$PROJECT_DIR$/src/budgetmanager/cli/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/budgetmanager/cli/cli.py" afterDir="false" />
+    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="added cli.py v.0.1&#10;updated pyproject.toml">
+      <change afterPath="$PROJECT_DIR$/src/budgetmanager/core/report.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/unit/test_report.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/project_structure.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/project_structure.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/budgetmanager/cli/cli.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/budgetmanager/cli/cli.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747148168628</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="added cli.py v.0.1&#10;updated pyproject.toml">
+      <option name="closed" value="true" />
+      <created>1747150517525</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1747150517525</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -201,6 +209,7 @@
     <MESSAGE value="chatgpt_guidelines.txt updated" />
     <MESSAGE value="added ledger.py v.0.1.1a (tested)" />
     <MESSAGE value="created core sub-package,&#10;moved transaction.py and ledger.py to core" />
-    <option name="LAST_COMMIT_MESSAGE" value="created core sub-package,&#10;moved transaction.py and ledger.py to core" />
+    <MESSAGE value="added cli.py v.0.1&#10;updated pyproject.toml" />
+    <option name="LAST_COMMIT_MESSAGE" value="added cli.py v.0.1&#10;updated pyproject.toml" />
   </component>
 </project>

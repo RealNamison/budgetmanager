@@ -15,6 +15,7 @@ BudgetManager/
 │       ├── core/
 │       │   ├── __init__.py
 │       │   ├── ledger.py
+│       │   ├── report.py
 │       │   └── transaction.py
 │       ├── file/
 │       │   ├── __init__.py
@@ -32,6 +33,7 @@ BudgetManager/
 │   │   ├── test_file_handler.py
 │   │   ├── test_json_handler.py
 │   │   ├── test_ledger.py
+│   │   ├── test_report.py
 │   │   ├── test_timestamp.py
 │   │   └── test_transaction.py
 │   └── conftest.py

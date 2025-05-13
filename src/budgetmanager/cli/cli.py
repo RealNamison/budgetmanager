@@ -18,6 +18,7 @@ from ..file.json_handler import JSONHandler
 from ..core.ledger import Ledger
 from ..core.transaction import Transaction
 from ..utils.timestamp import Timestamp
+from ..core.report import ReportGenerator
 
 
 def load_ledger(file_path: Path) -> Ledger:
@@ -105,6 +106,26 @@ def parse_args() -> argparse.Namespace:
         help='Show total balance, income, and expenses'
     )
 
+    sum_p = subparsers.add_parser(
+        'summary',
+        help='Show monthly or yearly summary'
+    )
+    sum_p.add_argument(
+        '--year', '-y',
+        type=int, required=True,
+        help='Four-digit year, z.B. 2025'
+    )
+    sum_p.add_argument(
+        '--month', '-m',
+        type=int,
+        help='Month (1–12); falls weggelassen, wird Jahres-Summary erstellt'
+    )
+    sum_p.add_argument(
+        '--export', '-e',
+        choices=['csv'],
+        help='Optional export to CSV'
+    )
+
     return parser.parse_args()
 
 
@@ -155,6 +176,27 @@ def main() -> int:
         print(f"Balance:  {bal}")
         print(f"Income:   {inc}")
         print(f"Expenses: {exp}")
+        return 0
+
+    if args.command == 'summary':
+        if args.month:
+            data = ReportGenerator.monthly_summary(
+                ledger, args.year, args.month
+            )
+            label = f"{args.year}-{args.month:02d}"
+        else:
+            data = ReportGenerator.yearly_summary(ledger, args.year)
+            label = str(args.year)
+
+        # Ausgabe auf STDOUT
+        for key, val in data.items():
+            print(f"{label} {key.capitalize()}: {val}")
+
+        # optionaler CSV-Export
+        if args.export == 'csv':
+            out = DATA_ROOT / 'processed' / f"summary_{label}.csv"
+            path = ReportGenerator.export_to_csv(data, out)
+            print(f"Exportiert nach: {path}")
         return 0
 
     return 1
