@@ -41,6 +41,7 @@ BudgetManager/
 │   │   ├── test_timestamp.py
 │   │   └── test_transaction.py
 │   └── conftest.py
+├── .gitignore
 ├── LICENSE
 ├── mkdocs.yml
 ├── pyproject.toml

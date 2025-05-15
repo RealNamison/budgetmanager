@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="added report.py v.0.1 (tested)&#10;updated cli.py to add summary/export">
-      <change afterPath="$PROJECT_DIR$/tests/integration/test_cli_flow_integration.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/integration/test_file_json_integration.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/integration/test_ledger_report_integration.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/integration/test_transaction_ledger_integration.py" afterDir="false" />
+    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="added integration tests (tested)&#10;updated report.py to change boundaries in summary methods">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/project_structure.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/project_structure.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/budgetmanager/core/report.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/budgetmanager/core/report.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +25,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "RealNamison"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/RealNamison/budgetmanager.git",
+    "accountId": "50d6745f-2a2e-4bda-80b3-0e326fc430a2"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -37,23 +46,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python tests.Doctests in template_python.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/yanis/PycharmProjects/BudgetManager&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python tests.Doctests in template_python.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/yanis/PycharmProjects/BudgetManager",
+    "settings.editor.selected.configurable": "vcs.Mercurial"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\yanis\PycharmProjects\BudgetManager" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\yanis\PycharmProjects\BudgetManager\src\budgetmanager\core" />
+      <recent name="C:\Users\yanis\PycharmProjects\BudgetManager" />
       <recent name="C:\Users\yanis\PycharmProjects\BudgetManager\docs" />
+      <recent name="C:\Users\yanis\PycharmProjects\BudgetManager\src\budgetmanager\core" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -192,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747153317529</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="added integration tests (tested)&#10;updated report.py to change boundaries in summary methods">
+      <option name="closed" value="true" />
+      <created>1747318961542</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1747318961542</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -221,6 +239,7 @@
     <MESSAGE value="created core sub-package,&#10;moved transaction.py and ledger.py to core" />
     <MESSAGE value="added cli.py v.0.1&#10;updated pyproject.toml" />
     <MESSAGE value="added report.py v.0.1 (tested)&#10;updated cli.py to add summary/export" />
-    <option name="LAST_COMMIT_MESSAGE" value="added report.py v.0.1 (tested)&#10;updated cli.py to add summary/export" />
+    <MESSAGE value="added integration tests (tested)&#10;updated report.py to change boundaries in summary methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="added integration tests (tested)&#10;updated report.py to change boundaries in summary methods" />
   </component>
 </project>
