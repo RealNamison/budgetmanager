@@ -3,3 +3,5 @@ __pycache__/
 .idea/
 .venv/
 data/
+build/
+src/budgetmanager.egg-info/
