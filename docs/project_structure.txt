@@ -27,7 +27,11 @@ BudgetManager/
 │       ├── __init__.py
 │       └── config.py
 ├── tests/
-│   ├── integration/				
+│   ├── integration/
+│   │   ├── test_cli_integration.py
+│   │   ├── test_file_json_integration.py
+│   │   ├── test_ledger_report_integration.py
+│   │   └── test_transaction_ledger_integration.py
 │   ├── unit/
 │   │   ├── __init__.py
 │   │   ├── test_file_handler.py

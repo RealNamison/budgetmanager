@@ -11,6 +11,7 @@ from pathlib import Path
 
 from .ledger import Ledger
 from ..file.json_handler import JSONHandler
+from ..utils.timestamp import Timestamp
 
 
 class ReportGenerator:
@@ -38,14 +39,11 @@ class ReportGenerator:
         """
         if not 1 <= month <= 12:
             raise ValueError(f"Invalid month: {month}")
-        from ..utils.timestamp import Timestamp
 
         # define start/end timestamps
         start = Timestamp.from_components(year, month, 1)
-        # trick: next month as end (handles December)
-        next_month = month % 12 + 1
-        end_year = year + (1 if month == 12 else 0)
-        end = Timestamp.from_components(end_year, next_month, 1)
+        end_day = 30 if month in [2, 4, 6, 9, 11] else 31
+        end = Timestamp.from_components(year, month, end_day)
         # filter transactions
         txs = ledger.filter_by_date_range(start, end)
         income = sum((t.amount for t in txs if t.is_income()), Decimal("0"))
@@ -65,10 +63,8 @@ class ReportGenerator:
             dict[str, Decimal]:
                 {"income": …, "expenses": …, "balance": …}
         """
-        from ..utils.timestamp import Timestamp
-
         start = Timestamp.from_components(year, 1, 1)
-        end = Timestamp.from_components(year + 1, 1, 1)
+        end = Timestamp.from_components(year, 12, 31)
         txs = ledger.filter_by_date_range(start, end)
         income = sum((t.amount for t in txs if t.is_income()), Decimal("0"))
         expenses = sum((t.amount for t in txs if t.is_expense()), Decimal("0"))
