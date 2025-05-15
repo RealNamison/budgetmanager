@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="added integration tests (tested)&#10;updated report.py to change boundaries in summary methods">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="fc602795-d799-41d6-a722-b1fdb74349c5" name="Changes" comment="added LICENSE&#10;added README.md &amp; index.md">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +51,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/yanis/PycharmProjects/BudgetManager",
-    "settings.editor.selected.configurable": "vcs.Mercurial"
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -210,7 +208,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747318961542</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="added LICENSE&#10;added README.md &amp; index.md">
+      <option name="closed" value="true" />
+      <created>1747324111917</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1747324111917</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -240,6 +246,7 @@
     <MESSAGE value="added cli.py v.0.1&#10;updated pyproject.toml" />
     <MESSAGE value="added report.py v.0.1 (tested)&#10;updated cli.py to add summary/export" />
     <MESSAGE value="added integration tests (tested)&#10;updated report.py to change boundaries in summary methods" />
-    <option name="LAST_COMMIT_MESSAGE" value="added integration tests (tested)&#10;updated report.py to change boundaries in summary methods" />
+    <MESSAGE value="added LICENSE&#10;added README.md &amp; index.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="added LICENSE&#10;added README.md &amp; index.md" />
   </component>
 </project>

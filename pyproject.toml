@@ -8,15 +8,35 @@ build-backend = "setuptools.build_meta"
 name = "budgetmanager"
 version = "0.1.0"
 description = "A simple budget managing CLI application."
-readme = "README.md"
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { file = "LICENSE" }
 requires-python = ">=3.10"
 authors = [
-  { name = "Yanis", email = "yanis@example.com" }
+  { name = "Yanis", email = "yanis.mohr@gmail.com" }
 ]
 dependencies = []
 
+classifiers = [
+  "Programming Language :: Python :: 3.10",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/RealNamison/budgetmanager"
+"Repository" = "https://github.com/RealNamison/budgetmanager.git"
+"Issue Tracker" = "https://github.com/RealNamison/budgetmanager/issues"
+
+
 [project.scripts]
 budgetmgr = "budgetmanager.cli.cli:main"
+# ─────────────────────────────────────────────────────────────────────────────
+
+[project.optional-dependencies]
+tests = [
+  "pytest>=7.0",
+  "pytest-cov",
+]
 # ─────────────────────────────────────────────────────────────────────────────
 
 [tool.setuptools]
