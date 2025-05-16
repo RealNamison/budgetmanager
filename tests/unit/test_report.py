@@ -147,3 +147,49 @@ def test_export_to_csv(tmp_path: Path) -> None:
     assert content["income"] == "123.45"
     assert content["expenses"] == "-67.89"
     assert content["balance"] == "55.56"
+
+def test_monthly_summary_february_leap_year() -> None:
+    """
+    Test that monthly_summary includes transactions on Feb 29 of a leap
+    year (2024).
+    """
+    ledger = Ledger()
+    ledger.add_transaction(Transaction(
+        timestamp=Timestamp.from_components(2024, 2, 29),
+        category="LeapDay",
+        amount=Decimal("100.00"),
+        description="Leap day income"
+    ))
+    summary = ReportGenerator.monthly_summary(ledger, year=2024, month=2)
+
+    assert summary["income"] == Decimal("100.00")
+    assert summary["expenses"] == Decimal("0")
+    assert summary["balance"] == Decimal("100.00")
+
+
+def test_monthly_summary_february_non_leap_year() -> None:
+    """
+    Test that monthly_summary correctly handles February in a non-leap
+    year (2025).
+    """
+    ledger = Ledger()
+    # Mitte Februar Ausgabe
+    ledger.add_transaction(Transaction(
+        timestamp=Timestamp.from_components(2025, 2, 15),
+        category="Expense",
+        amount=Decimal("-50.00"),
+        description="Mid-February expense"
+    ))
+    # Ende Februar Einnahme
+    ledger.add_transaction(Transaction(
+        timestamp=Timestamp.from_components(2025, 2, 28),
+        category="Income",
+        amount=Decimal("200.00"),
+        description="End-of-February income"
+    ))
+    summary = ReportGenerator.monthly_summary(ledger, year=2025, month=2)
+
+    assert summary["income"] == Decimal("200.00")
+    assert summary["expenses"] == Decimal("-50.00")
+    assert summary["balance"] == Decimal("150.00")
+

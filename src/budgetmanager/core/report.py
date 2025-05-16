@@ -8,6 +8,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 from pathlib import Path
+import calendar
 
 from .ledger import Ledger
 from ..file.json_handler import JSONHandler
@@ -42,7 +43,7 @@ class ReportGenerator:
 
         # define start/end timestamps
         start = Timestamp.from_components(year, month, 1)
-        end_day = 30 if month in [2, 4, 6, 9, 11] else 31
+        _, end_day = calendar.monthrange(year, month)
         end = Timestamp.from_components(year, month, end_day)
         # filter transactions
         txs = ledger.filter_by_date_range(start, end)
