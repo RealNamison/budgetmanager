@@ -1,9 +1,10 @@
-BudgetManager/
+budgetmanager/
 ├── data/
 │   ├── processed/
 │   └── raw/
 ├── docs/
-│   └── index.md
+│   ├── index.md
+│   └── project_structure.md
 ├── examples/
 │   ├── quickstart.ipynb
 │   └── advanced_usage.py
