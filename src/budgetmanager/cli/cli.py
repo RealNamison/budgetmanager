@@ -4,61 +4,24 @@
 Command-line interface for BudgetManager.
 
 This module provides the CLI entrypoint for interacting with the
-financial ledger, allowing users to add, list, and report
-transactions.
+financial ledger, allowing users to add, list, report transactions,
+and manage budgets with warning on overspend.
 """
 
 import argparse
 import sys
+import calendar
 from pathlib import Path
 from decimal import Decimal, InvalidOperation
+from json import JSONDecodeError
 
 from ..config import DATA_ROOT
 from ..file.json_handler import JSONHandler
 from ..core.ledger import Ledger
 from ..core.transaction import Transaction
+from ..core.budget import Budget
 from ..utils.timestamp import Timestamp
 from ..core.report import ReportGenerator
-
-
-def load_ledger(file_path: Path) -> Ledger:
-    """Load an existing ledger from JSON or initialize a new one.
-
-    Args:
-        file_path (Path): Path to the ledger JSON file.
-
-    Returns:
-        Ledger: Loaded ledger or a new empty one.
-
-    Raises:
-        OSError: If loading the JSON fails due to I/O errors.
-        ValueError: If JSON is invalid or ledger data malformed.
-    """
-    if file_path.exists():
-        try:
-            data = JSONHandler.load_json(str(file_path))
-            return Ledger.from_dict(data)
-        except Exception as e:
-            print(f"Error loading ledger: {e}", file=sys.stderr)
-            sys.exit(1)
-    return Ledger()
-
-
-def save_ledger(ledger: Ledger, file_path: Path) -> None:
-    """Save the ledger to a JSON file.
-
-    Args:
-        ledger (Ledger): The ledger to save.
-        file_path (Path): Path to the target JSON file.
-
-    Raises:
-        OSError: If writing the JSON fails.
-    """
-    try:
-        JSONHandler.save_json(ledger.to_dict(), str(file_path))
-    except Exception as e:
-        print(f"Error saving ledger: {e}", file=sys.stderr)
-        sys.exit(1)
 
 
 def parse_args() -> argparse.Namespace:
@@ -76,6 +39,7 @@ def parse_args() -> argparse.Namespace:
         required=True
     )
 
+    # Add transaction
     add_p = subparsers.add_parser(
         'add',
         help='Add a new transaction'
@@ -85,18 +49,22 @@ def parse_args() -> argparse.Namespace:
         help='ISO timestamp of the transaction'
     )
     add_p.add_argument(
-        '-c', '--category', required=True,
+        '-c', '--category',
+        required=True,
         help='Category or tag for the transaction'
     )
     add_p.add_argument(
-        '-a', '--amount', required=True,
+        '-a', '--amount',
+        required=True,
         help='Amount (positive for income, negative for expense)'
     )
     add_p.add_argument(
-        '-d', '--description', default='',
+        '-d', '--description',
+        default='',
         help='Short description'
     )
 
+    # List and balance
     subparsers.add_parser(
         'list',
         help='List all transactions'
@@ -106,6 +74,7 @@ def parse_args() -> argparse.Namespace:
         help='Show total balance, income, and expenses'
     )
 
+    # Summary
     sum_p = subparsers.add_parser(
         'summary',
         help='Show monthly or yearly summary'
@@ -126,7 +95,51 @@ def parse_args() -> argparse.Namespace:
         help='Optional export to CSV'
     )
 
+    # Budget subcommands
+    budget_p = subparsers.add_parser(
+        'budget',
+        help='Manage budgets'
+    )
+    budget_sub = budget_p.add_subparsers(
+        dest='budget_command',
+        required=True
+    )
+
+    add_b = budget_sub.add_parser(
+        'add',
+        help='Add a new budget'
+    )
+    add_b.add_argument(
+        '-c', '--category',
+        required=True,
+        help='Category name'
+    )
+    add_b.add_argument(
+        '-l', '--limit',
+        required=True,
+        help='Budget limit (positive number)'
+    )
+
+    budget_sub.add_parser(
+        'list',
+        help='List all budgets'
+    )
+
     return parser.parse_args()
+
+
+def load_ledger(file_path: Path) -> Ledger:
+    """Load or initialize the ledger from a file."""
+    try:
+        data = JSONHandler.load_json(str(file_path))
+        return Ledger.from_dict(data)
+    except FileNotFoundError:
+        return Ledger()
+
+
+def save_ledger(ledger: Ledger, file_path: Path) -> None:
+    """Save the ledger to a file."""
+    JSONHandler.save_json(ledger.to_dict(), str(file_path))
 
 
 def main() -> int:
@@ -139,6 +152,60 @@ def main() -> int:
     ledger_file = DATA_ROOT / 'processed' / 'ledger.json'
     ledger = load_ledger(ledger_file)
 
+    # --- Budget management ---
+    if args.command == 'budget':
+        # load existing budgets or start fresh
+        try:
+            raw = JSONHandler.load_json('processed', 'budgets.json')
+        except FileNotFoundError:
+            budgets: list[Budget] = []
+        except JSONDecodeError as e:
+            print(
+                f"Warning: could not parse budgets.json: {e}",
+                file=sys.stderr
+            )
+            budgets = []
+        else:
+            budgets = []
+            for entry in raw:
+                try:
+                    budgets.append(Budget.from_dict(entry))
+                except (KeyError, ValueError) as e:
+                    print(
+                        f"Skipping invalid budget entry {entry}: {e}",
+                        file=sys.stderr
+                    )
+
+        if args.budget_command == 'add':
+            try:
+                limit = Decimal(args.limit)
+            except InvalidOperation:
+                print(f"Invalid limit: {args.limit}", file=sys.stderr)
+                return 1
+
+            budgets.append(Budget(category=args.category, limit=limit))
+            try:
+                JSONHandler.save_json(
+                    [b.to_dict() for b in budgets],
+                    'processed',
+                    'budgets.json'
+                )
+            except Exception as e:
+                print(f"Error saving budgets: {e}", file=sys.stderr)
+                return 1
+
+            print(f"Added budget: {args.category} -> {limit}")
+            return 0
+
+        if args.budget_command == 'list':
+            if not budgets:
+                print("No budgets defined.")
+            else:
+                for b in budgets:
+                    print(f"{b.category}: {b.limit}")
+            return 0
+
+    # --- Add transaction ---
     if args.command == 'add':
         if args.timestamp:
             ts = Timestamp.from_isoformat(args.timestamp)
@@ -154,13 +221,57 @@ def main() -> int:
             timestamp=ts,
             category=args.category,
             amount=amt,
-            description=args.description,
+            description=args.description
         )
         ledger.add_transaction(tx)
+
+        # Budget warning on overspend
+        try:
+            raw = JSONHandler.load_json('processed', 'budgets.json')
+        except FileNotFoundError:
+            budgets = []
+        except JSONDecodeError as e:
+            print(
+                f"Warning: could not parse budgets.json: {e}",
+                file=sys.stderr
+            )
+            budgets = []
+        else:
+            budgets = []
+            for entry in raw:
+                try:
+                    budgets.append(Budget.from_dict(entry))
+                except (KeyError, ValueError) as e:
+                    print(
+                        f"Skipping invalid budget entry {entry}: {e}",
+                        file=sys.stderr
+                    )
+
+        now = Timestamp.now()
+        year, month = now.year, now.month
+        first_day = 1
+        last_day = calendar.monthrange(year, month)[1]
+        start = Timestamp.from_components(year, month, first_day)
+        end = Timestamp.from_components(year, month, last_day)
+
+        spent = sum(
+            -t.amount
+            for t in ledger.filter_by_category(tx.category)
+            if t.is_expense() and start <= t.timestamp <= end
+        )
+        for b in budgets:
+            if b.category == tx.category and spent > b.limit:
+                # ANSI red colored warning
+                print(
+                    f"\033[91mWarning: budget for '{b.category}' "
+                    f"exceeded ({spent} > {b.limit})\033[0m"
+                )
+
         save_ledger(ledger, ledger_file)
         print(f"Added: {tx}")
         return 0
 
+    # --- List transactions ---
     if args.command == 'list':
         if not ledger:
             print('No transactions found.')
@@ -169,6 +280,7 @@ def main() -> int:
                 print(t)
         return 0
 
+    # --- Show balance ---
     if args.command == 'balance':
         bal = ledger.get_balance()
         inc = ledger.total_income()
@@ -178,6 +290,7 @@ def main() -> int:
         print(f"Expenses: {exp}")
         return 0
 
+    # --- Summary report ---
     if args.command == 'summary':
         if args.month:
             data = ReportGenerator.monthly_summary(
@@ -188,15 +301,13 @@ def main() -> int:
             data = ReportGenerator.yearly_summary(ledger, args.year)
             label = str(args.year)
 
-        # Ausgabe auf STDOUT
         for key, val in data.items():
             print(f"{label} {key.capitalize()}: {val}")
 
-        # optionaler CSV-Export
         if args.export == 'csv':
             out = DATA_ROOT / 'processed' / f"summary_{label}.csv"
             path = ReportGenerator.export_to_csv(data, out)
-            print(f"Exportiert nach: {path}")
+            print(f"Exported to: {path}")
         return 0
 
     return 1

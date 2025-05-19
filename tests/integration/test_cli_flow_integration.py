@@ -8,6 +8,7 @@ operate correctly against a temporary DATA_ROOT.
 """
 
 import subprocess
+import os
 import sys
 from pathlib import Path
 
@@ -35,7 +36,10 @@ def run_cmd(args: list[str]) -> subprocess.CompletedProcess[str]:
         subprocess.CompletedProcess[str]: Completed process containing stdout and stderr.
     """
     cmd = [sys.executable, "-m", "budgetmanager.cli.cli"] + args
-    return subprocess.run(cmd, capture_output=True, text=True)
+    # Ensure the CLI uses the pytest‐tmp_path as DATA_ROOT
+    env = os.environ.copy()
+    env["BUDGETMANAGER_DATA_ROOT"] = str(config.DATA_ROOT)
+    return subprocess.run(cmd, env=env, capture_output=True, text=True)
 
 
 def test_cli_add_and_list(tmp_path: Path) -> None:
@@ -63,3 +67,33 @@ def test_cli_balance_and_summary(tmp_path: Path) -> None:
     # Assert: verify balance and summary outputs contain expected markers
     assert "Balance:" in balance_result.stdout
     assert "2025-01 Income" in summary_result.stdout
+
+
+def test_cli_budget_add_and_list(tmp_path: Path) -> None:
+    """
+    Test the 'budget add' and 'budget list' commands work end-to-end.
+    """
+    # Fügt ein Budget hinzu
+    result_add = run_cmd(["budget", "add", "-c", "rent", "-l", "1000"])
+    assert result_add.returncode == 0
+    assert "Added budget: rent -> 1000" in result_add.stdout
+
+    # Listet alle Budgets auf
+    result_list = run_cmd(["budget", "list"])
+    assert result_list.returncode == 0
+    assert "rent: 1000" in result_list.stdout
+
+
+def test_cli_budget_warning_on_overspend(tmp_path: Path) -> None:
+    """
+    Test that adding a transaction beyond the budget limit emits a warning.
+    """
+    # 1) Budget setzen
+    run_cmd(["budget", "add", "-c", "groceries", "-l", "50"])
+    # 2) Zwei Ausgaben hinzufügen, die insgesamt >50 sind
+    run_cmd(["add", "-c", "groceries", "-a", "-30"])
+    result_warn = run_cmd(["add", "-c", "groceries", "-a", "-25"])
+
+    # CLI sollte Warnung ausgeben und trotzdem exitcode 0 zurückliefern
+    assert result_warn.returncode == 0
+    assert "Warning: budget for 'groceries' exceeded (55 > 50)" in result_warn.stdout

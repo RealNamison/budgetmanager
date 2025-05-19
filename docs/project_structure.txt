@@ -1,6 +1,8 @@
 budgetmanager/
 ├── data/
 │   ├── processed/
+│   │   ├── budgets.json
+│   │   └── ledger.json
 │   └── raw/
 ├── docs/
 │   ├── index.md
@@ -15,6 +17,7 @@ budgetmanager/
 │       │   └── cli.py
 │       ├── core/
 │       │   ├── __init__.py
+│       │   ├── budget.py
 │       │   ├── ledger.py
 │       │   ├── report.py
 │       │   └── transaction.py
