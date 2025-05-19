@@ -1,4 +1,10 @@
-# src/budgetmanager/core/budget.py
+#!/usr/bin/env python3.10
+# -*- coding: utf-8 -*-
+"""
+Module for Budget data model.
+
+Defines the Budget class used to represent spending limits per category.
+"""
 
 from __future__ import annotations
 from decimal import Decimal, InvalidOperation
