@@ -14,7 +14,9 @@ requires-python = ">=3.10"
 authors = [
   { name = "Yanis", email = "yanis.mohr@gmail.com" }
 ]
-dependencies = []
+dependencies = [
+  "matplotlib>=3.5,<4.0"
+]
 
 classifiers = [
   "Programming Language :: Python :: 3.10",
@@ -34,7 +36,7 @@ budgetmgr = "budgetmanager.cli.cli:main"
 
 [project.optional-dependencies]
 tests = [
-  "pytest>=7.0",
+  "pytest>=8.3.5",
   "pytest-cov",
 ]
 # ─────────────────────────────────────────────────────────────────────────────

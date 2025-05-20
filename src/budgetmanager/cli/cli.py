@@ -22,6 +22,7 @@ from ..core.transaction import Transaction
 from ..core.budget import Budget
 from ..utils.timestamp import Timestamp
 from ..core.report import ReportGenerator
+from ..core.chart import generate_chart
 
 
 def parse_args() -> argparse.Namespace:
@@ -123,6 +124,31 @@ def parse_args() -> argparse.Namespace:
     budget_sub.add_parser(
         'list',
         help='List all budgets'
+    )
+
+    # Chart
+    chart_p = subparsers.add_parser(
+        'chart',
+        help='Show income/expanses per category as ASCII and optional PNG/SVG'
+    )
+    chart_p.add_argument(
+        '--start', '-s',
+        type=str, required=True,
+        help='Start date (YYYY-MM-DD)'
+    )
+    chart_p.add_argument(
+        '--end', '-e',
+        type=str, required=True,
+        help='End date (YYYY-MM-DD)'
+    )
+    fmt_group = chart_p.add_mutually_exclusive_group()
+    fmt_group.add_argument(
+        '--png', action='store_true',
+        help='Save chart as PNG'
+    )
+    fmt_group.add_argument(
+        '--svg', action='store_true',
+        help='Save Chart as SVG'
     )
 
     return parser.parse_args()
@@ -313,6 +339,35 @@ def main() -> int:
             out = DATA_ROOT / 'processed' / f"summary_{label}.csv"
             path = ReportGenerator.export_to_csv(data, out)
             print(f"Exported to: {path}")
+        return 0
+
+    # --- Show chart ---
+    if args.command == 'chart':
+        # parse and validate "YYYY-MM-DD"
+        try:
+            y1, m1, d1 = map(int, args.start.split('-'))
+            y2, m2, d2 = map(int, args.end.split('-'))
+        except ValueError:
+            print(
+                "Invalid date format, please use YYYY-MM-DD.",
+                file=sys.stderr
+            )
+            return 1
+
+        # build timestamps at start of day and end of day
+        start_ts = Timestamp.from_components(y1, m1, d1)
+        end_ts = Timestamp.from_components(y2, m2, d2, 23, 59, 59, 999_999)
+
+        # Export format
+        export_fmt: str | None = None
+
+        if args.png:
+            export_fmt = 'png'
+        elif args.svg:
+            export_fmt = 'svg'
+
+        # generate chart
+        generate_chart(ledger, start_ts, end_ts, export_fmt)
         return 0
 
     return 1
