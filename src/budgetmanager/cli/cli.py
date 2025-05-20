@@ -183,6 +183,11 @@ def main() -> int:
                 print(f"Invalid limit: {args.limit}", file=sys.stderr)
                 return 1
 
+            # overwrite existing budget for this category, if any
+            budgets = [
+                b for b in budgets
+                if b.category != args.category
+            ]
             budgets.append(Budget(category=args.category, limit=limit))
             try:
                 JSONHandler.save_json(
@@ -194,7 +199,7 @@ def main() -> int:
                 print(f"Error saving budgets: {e}", file=sys.stderr)
                 return 1
 
-            print(f"Added budget: {args.category} -> {limit}")
+            print(f"Set budget: {args.category} -> {limit}")
             return 0
 
         if args.budget_command == 'list':

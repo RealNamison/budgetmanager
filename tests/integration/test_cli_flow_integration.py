@@ -76,7 +76,7 @@ def test_cli_budget_add_and_list(tmp_path: Path) -> None:
     # Add budget
     result_add = run_cmd(["budget", "add", "-c", "rent", "-l", "1000"])
     assert result_add.returncode == 0
-    assert "Added budget: rent -> 1000" in result_add.stdout
+    assert "Set budget: rent -> 1000" in result_add.stdout
 
     # List all budgets
     result_list = run_cmd(["budget", "list"])
