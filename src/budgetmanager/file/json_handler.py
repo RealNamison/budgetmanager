@@ -13,6 +13,13 @@ from pathlib import Path
 
 from .file_handler import FileHandler
 
+import warnings
+warnings.warn(
+    "JSONHandler is deprecated and will be removed in version 2; please use SQLite.",
+    DeprecationWarning,
+    stacklevel=2
+)
+
 
 class JSONHandler:
     """
