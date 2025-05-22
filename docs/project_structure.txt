@@ -27,7 +27,8 @@ budgetmanager/
 │       ├── file/
 │       │   ├── __init__.py
 │       │   ├── file_handler.py
-│       │   └── json_handler.py
+│       │   ├── json_handler.py
+│       │   └── sqlite_handler.py
 │       ├── utils/
 │       │   ├── __init__.py
 │       │   └── timestamp.py
@@ -45,6 +46,7 @@ budgetmanager/
 │   │   ├── test_json_handler.py
 │   │   ├── test_ledger.py
 │   │   ├── test_report.py
+│   │   ├── test_sqlite_handler.py
 │   │   ├── test_timestamp.py
 │   │   └── test_transaction.py
 │   └── conftest.py

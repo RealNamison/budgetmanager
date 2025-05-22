@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "budgetmanager"
-version = "0.1.0"
-description = "A simple budget managing CLI application."
+version = "0.1.1"
+description = "A simple budget managing CLI application using SQLite."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 requires-python = ">=3.10"

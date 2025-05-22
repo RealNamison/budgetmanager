@@ -6,6 +6,7 @@ Global configuration for the BudgetManager project.
 Attributes:
     PROJECT_ROOT (Path): The root directory of the project.
     DATA_ROOT (Path): The directory where data files are stored.
+    DB_FILE (Path): Location of the SQLite database.
 """
 
 import os
@@ -30,4 +31,4 @@ PROJECT_ROOT: Path = _determine_project_root()
 _env: str | None = os.getenv("BUDGETMANAGER_DATA_ROOT")
 DATA_ROOT: Path = Path(_env) if _env else PROJECT_ROOT / "data"
 
-BUDGETS_FILE: Path = DATA_ROOT / "processed" / "budgets.json"
+DB_FILE: Path = DATA_ROOT / "processed" / "budget.db"

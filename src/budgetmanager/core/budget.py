@@ -27,6 +27,25 @@ class Budget:
         self.category = category
         self.limit = limit
 
+    def __eq__(self, other: object) -> bool:
+        """
+        Compare two Budget instances for equality by category and limit.
+
+        Args:
+            other (object): The object to compare with.
+
+        Returns:
+            bool: True if both are Budgets with identical category and limit.
+        """
+        if not isinstance(other, Budget):
+            return NotImplemented
+        return self.category == other.category and self.limit == other.limit
+
+    def __repr__(self) -> str:
+        """Unambiguous representation for debugging and testing."""
+        return f"{self.__class__.__name__}(" \
+               f"category={self.category!r}, limit={self.limit!r})"
+
     def to_dict(self) -> dict[str, str]:
         """Serialize Budget to a JSON-friendly dict.
 
