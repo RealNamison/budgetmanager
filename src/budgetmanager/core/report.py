@@ -11,7 +11,6 @@ from pathlib import Path
 import calendar
 
 from .ledger import Ledger
-from ..file.json_handler import JSONHandler
 from ..utils.timestamp import Timestamp
 
 

@@ -3,8 +3,9 @@
 """
 End-to-end integration tests for the CLI.
 
-Verifies that the `add`, `list`, `balance`, `summary`, and `chart` commands
-operate correctly against a temporary DATA_ROOT.
+Verifies that the `add`, `list`, `balance`, `summary`, `chart`, and
+`budget` commands operate correctly against a temporary DATA_ROOT
+and SQLite database backend.
 """
 
 import subprocess
@@ -18,12 +19,18 @@ from budgetmanager import config
 
 
 @pytest.fixture(autouse=True)
-def isolate_data_root(tmp_path: Path, monkeypatch) -> None:
+def isolate_data_root_and_db(tmp_path: Path, monkeypatch) -> None:
     """
-    Override DATA_ROOT for all CLI tests to use a temporary directory.
+    Override DATA_ROOT and DB_FILE for all CLI tests to use a temporary
+    directory and database, instead of JSON files.
     """
+    # Redirect DATA_ROOT to tmp_path
     monkeypatch.setenv("BUDGETMANAGER_DATA_ROOT", str(tmp_path))
     monkeypatch.setattr(config, "DATA_ROOT", tmp_path)
+
+    # Ensure the CLI's SQLiteHandler will use a DB under tmp_path/processed/budget.db
+    db_file = tmp_path / "processed" / "budget.db"
+    monkeypatch.setattr(config, "DB_FILE", db_file)
 
 
 def run_cmd(args: list[str]) -> subprocess.CompletedProcess[str]:
@@ -38,6 +45,7 @@ def run_cmd(args: list[str]) -> subprocess.CompletedProcess[str]:
     """
     cmd = [sys.executable, "-m", "budgetmanager.cli.cli"] + args
     env = os.environ.copy()
+    # Ensure child process sees our overridden DATA_ROOT
     env["BUDGETMANAGER_DATA_ROOT"] = str(config.DATA_ROOT)
     return subprocess.run(cmd, env=env, capture_output=True, text=True)
 
@@ -47,9 +55,10 @@ def test_cli_add_and_list(tmp_path: Path) -> None:
     Test that the 'add' command creates an entry and 'list' displays it.
     """
     result_add = run_cmd(["add", "-c", "test", "-a", "10.00"])
-    result_list = run_cmd(["list"])
-
     assert result_add.returncode == 0
+
+    result_list = run_cmd(["list"])
+    assert result_list.returncode == 0
     assert "test" in result_list.stdout
 
 
@@ -59,9 +68,11 @@ def test_cli_balance_and_summary(tmp_path: Path) -> None:
     """
     run_cmd(["add", "-c", "foo", "-a", "20.00"])
     balance_result = run_cmd(["balance"])
-    summary_result = run_cmd(["summary", "-y", "2025", "-m", "1"])
-
+    assert balance_result.returncode == 0
     assert "Balance:" in balance_result.stdout
+
+    summary_result = run_cmd(["summary", "-y", "2025", "-m", "1"])
+    assert summary_result.returncode == 0
     assert "2025-01 Income" in summary_result.stdout
 
 
@@ -102,7 +113,6 @@ def test_cli_chart_ascii_only(tmp_path: Path) -> None:
         "--start", "2025-01-01",
         "--end",   "2026-01-01"
     ])
-
     assert result.returncode == 0
     assert "Income:" in result.stdout
     assert "salary" in result.stdout
@@ -123,7 +133,6 @@ def test_cli_chart_with_png_export(tmp_path: Path) -> None:
         "--end",   "2026-01-01",
         "--png"
     ])
-
     assert result.returncode == 0
     assert "Graphical chart saved to:" in result.stdout
 

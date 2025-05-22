@@ -13,10 +13,9 @@ import sys
 import calendar
 from pathlib import Path
 from decimal import Decimal, InvalidOperation
-from json import JSONDecodeError
 
 from ..config import DATA_ROOT
-from ..file.json_handler import JSONHandler
+from ..file.sqlite_handler import SQLiteHandler
 from ..core.ledger import Ledger
 from ..core.transaction import Transaction
 from ..core.budget import Budget
@@ -154,20 +153,6 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_ledger(file_path: Path) -> Ledger:
-    """Load or initialize the ledger from a file."""
-    try:
-        data = JSONHandler.load_json(str(file_path))
-        return Ledger.from_dict(data)
-    except FileNotFoundError:
-        return Ledger()
-
-
-def save_ledger(ledger: Ledger, file_path: Path) -> None:
-    """Save the ledger to a file."""
-    JSONHandler.save_json(ledger.to_dict(), str(file_path))
-
-
 def main() -> int:
     """Main entry point for the CLI.
 
@@ -175,33 +160,11 @@ def main() -> int:
         int: Exit code (0 for success, non-zero for errors).
     """
     args = parse_args()
-    ledger_file = DATA_ROOT / 'processed' / 'ledger.json'
-    ledger = load_ledger(ledger_file)
+    handler = SQLiteHandler()
+    ledger = Ledger(handler.get_all_transactions())
 
     # --- Budget management ---
     if args.command == 'budget':
-        # load existing budgets or start fresh
-        try:
-            raw = JSONHandler.load_json('processed', 'budgets.json')
-        except FileNotFoundError:
-            budgets: list[Budget] = []
-        except JSONDecodeError as e:
-            print(
-                f"Warning: could not parse budgets.json: {e}",
-                file=sys.stderr
-            )
-            budgets = []
-        else:
-            budgets = []
-            for entry in raw:
-                try:
-                    budgets.append(Budget.from_dict(entry))
-                except (KeyError, ValueError) as e:
-                    print(
-                        f"Skipping invalid budget entry {entry}: {e}",
-                        file=sys.stderr
-                    )
-
         if args.budget_command == 'add':
             try:
                 limit = Decimal(args.limit)
@@ -209,26 +172,13 @@ def main() -> int:
                 print(f"Invalid limit: {args.limit}", file=sys.stderr)
                 return 1
 
-            # overwrite existing budget for this category, if any
-            budgets = [
-                b for b in budgets
-                if b.category != args.category
-            ]
-            budgets.append(Budget(category=args.category, limit=limit))
-            try:
-                JSONHandler.save_json(
-                    [b.to_dict() for b in budgets],
-                    'processed',
-                    'budgets.json'
-                )
-            except Exception as e:
-                print(f"Error saving budgets: {e}", file=sys.stderr)
-                return 1
-
-            print(f"Set budget: {args.category} -> {limit}")
+            budget = Budget(category=args.category, limit=limit)
+            handler.add_budget(budget)
+            print(f"Set budget: {budget.category} -> {budget.limit}")
             return 0
 
         if args.budget_command == 'list':
+            budgets = handler.get_budgets()
             if not budgets:
                 print("No budgets defined.")
             else:
@@ -242,6 +192,7 @@ def main() -> int:
             ts = Timestamp.from_isoformat(args.timestamp)
         else:
             ts = Timestamp.now()
+
         try:
             amt = Decimal(args.amount)
         except InvalidOperation:
@@ -254,30 +205,11 @@ def main() -> int:
             amount=amt,
             description=args.description
         )
+        handler.add_transaction(tx)
         ledger.add_transaction(tx)
 
         # Budget warning on overspend
-        try:
-            raw = JSONHandler.load_json('processed', 'budgets.json')
-        except FileNotFoundError:
-            budgets = []
-        except JSONDecodeError as e:
-            print(
-                f"Warning: could not parse budgets.json: {e}",
-                file=sys.stderr
-            )
-            budgets = []
-        else:
-            budgets = []
-            for entry in raw:
-                try:
-                    budgets.append(Budget.from_dict(entry))
-                except (KeyError, ValueError) as e:
-                    print(
-                        f"Skipping invalid budget entry {entry}: {e}",
-                        file=sys.stderr
-                    )
-
+        budgets = handler.get_budgets()
         now = Timestamp.now()
         year, month = now.year, now.month
         first_day = 1
@@ -292,20 +224,18 @@ def main() -> int:
         )
         for b in budgets:
             if b.category == tx.category and spent > b.limit:
-                # ANSI red colored warning
                 print(
                     f"\033[91mWarning: budget for '{b.category}' "
                     f"exceeded ({spent} > {b.limit})\033[0m"
                 )
 
-        save_ledger(ledger, ledger_file)
         print(f"Added: {tx}")
         return 0
 
     # --- List transactions ---
     if args.command == 'list':
         if not ledger:
-            print('No transactions found.')
+            print("No transactions found.")
         else:
             for t in ledger:
                 print(t)
@@ -343,7 +273,6 @@ def main() -> int:
 
     # --- Show chart ---
     if args.command == 'chart':
-        # parse and validate "YYYY-MM-DD"
         try:
             y1, m1, d1 = map(int, args.start.split('-'))
             y2, m2, d2 = map(int, args.end.split('-'))
@@ -354,19 +283,17 @@ def main() -> int:
             )
             return 1
 
-        # build timestamps at start of day and end of day
         start_ts = Timestamp.from_components(y1, m1, d1)
-        end_ts = Timestamp.from_components(y2, m2, d2, 23, 59, 59, 999_999)
+        end_ts = Timestamp.from_components(
+            y2, m2, d2, 23, 59, 59, 999_999
+        )
 
-        # Export format
         export_fmt: str | None = None
-
         if args.png:
             export_fmt = 'png'
         elif args.svg:
             export_fmt = 'svg'
 
-        # generate chart
         generate_chart(ledger, start_ts, end_ts, export_fmt)
         return 0
 
