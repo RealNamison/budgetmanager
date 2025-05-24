@@ -2,13 +2,14 @@ budgetmanager/
 ├── data/
 │   ├── processed/
 │   │   ├── charts/
-│   │   │   └── chart_2025-05-01_to_2025-05-20.png
 │   │   ├── budgets.json
 │   │   └── ledger.json
 │   └── raw/
 ├── docs/
 │   ├── index.md
-│   └── project_structure.md
+│   ├── project_structure.md
+│   ├── reports.md
+│   └── usage.md
 ├── examples/
 │   ├── quickstart.ipynb
 │   └── advanced_usage.py
