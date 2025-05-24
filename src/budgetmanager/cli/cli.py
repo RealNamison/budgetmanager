@@ -9,6 +9,7 @@ and manage budgets with warning on overspend.
 """
 
 import argparse
+import argcomplete
 import sys
 import calendar
 from pathlib import Path
@@ -25,7 +26,7 @@ from ..core.chart import generate_chart
 
 
 def parse_args() -> argparse.Namespace:
-    """Parse command-line arguments.
+    """Parse command-line arguments, with argcomplete enabled.
 
     Returns:
         argparse.Namespace: Parsed arguments.
@@ -149,6 +150,8 @@ def parse_args() -> argparse.Namespace:
         '--svg', action='store_true',
         help='Save Chart as SVG'
     )
+
+    argcomplete.autocomplete(parser)
 
     return parser.parse_args()
 
