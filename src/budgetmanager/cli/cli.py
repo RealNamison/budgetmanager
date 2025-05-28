@@ -97,35 +97,33 @@ def parse_args() -> argparse.Namespace:
         help='ID of the transaction to remove'
     )
 
-    # Summary
+    # Summary: monthly, yearly or custom range
     sum_p = subparsers.add_parser(
         'summary',
-        help='Show monthly or yearly summary'
+        help='Show monthly, yearly or custom range summary'
     )
-    sum_p.add_argument(
+    # require either a year or a start/end range
+    sum_group = sum_p.add_mutually_exclusive_group(required=True)
+    sum_group.add_argument(
         '--year', '-y',
-        type=int, required=True,
-        help='Four-digit year, z.B. 2025'
+        type=int,
+        help='Four-digit year, e.g. 2025'
+    )
+    sum_group.add_argument(
+        '--range',
+        nargs=2,
+        metavar=('START', 'END'),
+        help='Start and end timestamps in ISO format'
     )
     sum_p.add_argument(
         '--month', '-m',
         type=int,
-        help='Month (1–12); falls weggelassen, wird Jahres-Summary erstellt'
+        help='Month (1–12); only valid with --year'
     )
     sum_p.add_argument(
         '--export', '-e',
         choices=['csv'],
         help='Optional export to CSV'
-    )
-
-    # Budget subcommands
-    budget_p = subparsers.add_parser(
-        'budget',
-        help='Manage budgets'
-    )
-    budget_sub = budget_p.add_subparsers(
-        dest='budget_command',
-        required=True
     )
 
     add_b = budget_sub.add_parser(
@@ -335,18 +333,51 @@ def main() -> int:
 
     # --- Summary report ---
     if args.command == 'summary':
-        if args.month:
-            data = ReportGenerator.monthly_summary(
-                ledger, args.year, args.month
-            )
-            label = f"{args.year}-{args.month:02d}"
-        else:
-            data = ReportGenerator.yearly_summary(ledger, args.year)
-            label = str(args.year)
+        # custom range if provided
+        if args.range:
+            # parse both timestamps
+            try:
+                start_ts = Timestamp.from_isoformat(args.range[0])
+                end_ts = Timestamp.from_isoformat(args.range[1])
+            except ValueError as e:
+                print(f"Invalid timestamp: {e}", file=sys.stderr)
+                return 1
 
+            # compute range summary
+            try:
+                data = ReportGenerator.range_summary(
+                    ledger, start_ts, end_ts
+                )
+            except ValueError as e:
+                print(f"Error generating range summary: {e}", file=sys.stderr)
+                return 1
+
+            # use raw inputs for label
+            label = f"{args.range[0]}_to_{args.range[1]}"
+        else:
+            # fall back to year/month summaries
+            if args.year is None:
+                print("Year is required when not using --range", file=sys.stderr)
+                return 1
+
+            if args.month:
+                # monthly summary
+                data = ReportGenerator.monthly_summary(
+                    ledger, args.year, args.month
+                )
+                label = f"{args.year}-{args.month:02d}"
+            else:
+                # yearly summary
+                data = ReportGenerator.yearly_summary(
+                    ledger, args.year
+                )
+                label = str(args.year)
+
+        # print results
         for key, val in data.items():
             print(f"{label} {key.capitalize()}: {val}")
 
+        # optional CSV export
         if args.export == 'csv':
             out = DATA_ROOT / 'processed' / f"summary_{label}.csv"
             path = ReportGenerator.export_to_csv(data, out)

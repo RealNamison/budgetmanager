@@ -72,6 +72,49 @@ class ReportGenerator:
                 "balance": income + expenses}
 
     @staticmethod
+    def range_summary(
+            ledger: Ledger,
+            start: Timestamp,
+            end: Timestamp
+    ) -> dict[str, Decimal]:
+        """Compute total income, expenses and balance between two timestamps.
+
+        Args:
+            ledger (Ledger): The ledger to summarize.
+            start (Timestamp): Start of interval (inclusive).
+            end (Timestamp): End of interval (inclusive).
+
+        Returns:
+            dict[str, Decimal]: {
+                "income": total positive amounts,
+                "expenses": total negative amounts,
+                "balance": income + expenses
+            }
+
+        Raises:
+            ValueError: If start is after end.
+
+        Examples:
+            >>> from utils.timestamp import Timestamp
+            >>> from .ledger import Ledger
+            >>> start = Timestamp.from_isoformat("2025-01-01T00:00:00")
+            >>> end = Timestamp.from_isoformat("2025-01-31T23:59:59")
+            >>> ReportGenerator.range_summary(ledger, start, end)
+            {"income": Decimal("..."), "expenses": Decimal("..."), "balance": Decimal("...")}
+        """
+        if start > end:
+            raise ValueError(f"Start {start} is after end {end}")
+
+        txs = ledger.filter_by_date_range(start, end)
+        income = sum((t.amount for t in txs if t.is_income()), Decimal("0"))
+        expenses = sum((t.amount for t in txs if t.is_expense()), Decimal("0"))
+        return {
+            "income": income,
+            "expenses": expenses,
+            "balance": income + expenses
+        }
+
+    @staticmethod
     def export_to_csv(data: dict[str, Any], path: Path) -> Path:
         """Export summary dict to a CSV file with two columns.
 
