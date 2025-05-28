@@ -67,9 +67,19 @@ def parse_args() -> argparse.Namespace:
     )
 
     # List and balance
-    subparsers.add_parser(
+    list_p = subparsers.add_parser(
         'list',
-        help='List all transactions'
+        help='List transactions with optional limit and reverse order'
+    )
+    list_p.add_argument(
+        '-n', '--limit',
+        type=int,
+        help='Show only the last N transactions'
+    )
+    list_p.add_argument(
+        '-r', '--reverse',
+        action='store_true',
+        help='Reverse the order of transactions'
     )
     subparsers.add_parser(
         'balance',
@@ -287,10 +297,18 @@ def main() -> int:
 
     # --- List transactions ---
     if args.command == 'list':
-        if not ledger:
+        # Retrieve all transactions
+        txs = list(ledger)
+        if not txs:
             print("No transactions found.")
         else:
-            for t in ledger:
+            # Limit to last N transactions if specified
+            if args.limit is not None:
+                txs = txs[-args.limit:]
+            # Reverse order if requested
+            if args.reverse:
+                txs = list(reversed(txs))
+            for t in txs:
                 print(t)
         return 0
 
