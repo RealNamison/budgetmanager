@@ -144,20 +144,42 @@ class SQLiteHandler:
             )
         return result
 
-    def remove_transaction(self, tx_id: int) -> None:
-        """Delete a transaction by its ID.
+    def remove_transaction(self, tx_id: int) -> Transaction | None:
+        """Delete a transaction by its ID and return the deleted Transaction.
 
         Args:
             tx_id (int): ID of the transaction to remove.
 
+        Returns:
+            Transaction | None: The deleted transaction if found,
+            otherwise None.
+
         Raises:
             sqlite3.IntegrityError: If deletion violates constraints.
+            sqlite3.OperationalError: On query failure.
         """
         with self._connect() as conn:
+            row = conn.execute(
+                "SELECT id, timestamp, category, amount, description "
+                "FROM transactions WHERE id = ?",
+                (tx_id,)
+            ).fetchone()
+            if row is None:
+                return None
+
+            tx = Transaction(
+                Timestamp.from_isoformat(row["timestamp"]),
+                row["category"],
+                Decimal(row["amount"]),
+                row["description"] or ""
+            )
+
             conn.execute(
                 "DELETE FROM transactions WHERE id = ?",
                 (tx_id,)
             )
+
+            return tx
 
     def add_budget(self, budget: Budget) -> None:
         """Insert or update a Budget in the database.

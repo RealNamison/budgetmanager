@@ -9,6 +9,7 @@ This module tests monthly_summary, yearly_summary, and CSV export functionality.
 import csv
 from decimal import Decimal
 from pathlib import Path
+import calendar
 
 import pytest
 
@@ -193,3 +194,64 @@ def test_monthly_summary_february_non_leap_year() -> None:
     assert summary["expenses"] == Decimal("-50.00")
     assert summary["balance"] == Decimal("150.00")
 
+
+def test_range_summary_full_month() -> None:
+    """
+    Test that range_summary over full May 2025 matches monthly_summary.
+
+    Uses the full month range and compares with monthly_summary results.
+    """
+    ledger = make_sample_ledger()
+    # full May 2025: from May 1 to May 31
+    start = Timestamp.from_components(2025, 5, 1)
+    end_day = calendar.monthrange(2025, 5)[1]
+    end = Timestamp.from_components(2025, 5, end_day)
+
+    full_range = ReportGenerator.range_summary(ledger, start, end)
+    monthly = ReportGenerator.monthly_summary(ledger, year=2025, month=5)
+
+    assert full_range == monthly
+
+
+def test_range_summary_empty() -> None:
+    """
+    Test that range_summary returns zeros for a range with no transactions.
+    """
+    ledger = make_sample_ledger()
+    # July 2025 has no sample transactions
+    start = Timestamp.from_components(2025, 7, 1)
+    end = Timestamp.from_components(2025, 7, 31)
+
+    summary = ReportGenerator.range_summary(ledger, start, end)
+    assert summary["income"] == Decimal("0")
+    assert summary["expenses"] == Decimal("0")
+    assert summary["balance"] == Decimal("0")
+
+
+def test_range_summary_partial_span() -> None:
+    """
+    Test that range_summary correctly aggregates transactions between two dates.
+
+    Range covers the expense on May 15 and the income on June 10.
+    """
+    ledger = make_sample_ledger()
+    start = Timestamp.from_components(2025, 5, 15)
+    end = Timestamp.from_components(2025, 6, 10)
+
+    summary = ReportGenerator.range_summary(ledger, start, end)
+    # expected: income 500.00, expenses -200.50, balance 299.50
+    assert summary["income"] == Decimal("500.00")
+    assert summary["expenses"] == Decimal("-200.50")
+    assert summary["balance"] == Decimal("299.50")
+
+
+def test_range_summary_invalid_dates() -> None:
+    """
+    Test that range_summary raises ValueError when start is after end.
+    """
+    ledger = make_sample_ledger()
+    start = Timestamp.from_components(2025, 6, 1)
+    end = Timestamp.from_components(2025, 5, 1)
+
+    with pytest.raises(ValueError):
+        ReportGenerator.range_summary(ledger, start, end)

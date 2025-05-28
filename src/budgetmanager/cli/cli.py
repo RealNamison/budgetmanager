@@ -9,7 +9,10 @@ and manage budgets with warning on overspend.
 """
 
 import argparse
-import argcomplete
+try:
+    import argcomplete
+except ImportError:
+    argcomplete = None
 import sys
 import calendar
 import sqlite3
@@ -126,6 +129,19 @@ def parse_args() -> argparse.Namespace:
         help='Optional export to CSV'
     )
 
+    # --- Budget management ---
+    budget_p = subparsers.add_parser(
+        'budget',
+        help='Manage budgets'
+    )
+    budget_sub = budget_p.add_subparsers(
+        dest='budget_command',
+        required=True
+    )
+    add_b = budget_sub.add_parser(
+        'add',
+        help='Add a new budget'
+    )
     add_b = budget_sub.add_parser(
         'add',
         help='Add a new budget'
@@ -181,7 +197,8 @@ def parse_args() -> argparse.Namespace:
         help='Save Chart as SVG'
     )
 
-    argcomplete.autocomplete(parser)
+    if argcomplete:
+        argcomplete.autocomplete(parser)
 
     return parser.parse_args()
 
@@ -208,7 +225,7 @@ def main() -> int:
             budget = Budget(category=args.category, limit=limit)
             try:
                 handler.add_budget(budget)
-            except sqlite3.Errorq as e:
+            except sqlite3.Error as e:
                 print(f"Error adding budget '{args.category}': {e}", file=sys.stderr)
                 return 1
             print(f"Set budget: {budget.category} -> {budget.limit}")
@@ -314,10 +331,21 @@ def main() -> int:
     if args.command == 'remove':
         tx_id = args.id
         try:
-            handler.remove_transaction(tx_id)
+            deleted_tx = handler.remove_transaction(tx_id)
         except sqlite3.Error as e:
-            print(f"Error removing transaction: {e}", file=sys.stderr)
+            print(f"Error removing transaction from database: {e}", file=sys.stderr)
             return 1
+
+        if deleted_tx is None:
+            print(f"No transaction with ID {tx_id} found.", file=sys.stderr)
+            return 1
+
+        try:
+            ledger.remove_transaction(deleted_tx)
+        except ValueError as e:
+            print(f"Error removing transaction from ledger: {e}", file=sys.stderr)
+            return 1
+
         print(f"Removed transaction with ID {tx_id}")
         return 0
 
