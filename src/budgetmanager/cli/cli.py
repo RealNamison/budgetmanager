@@ -142,10 +142,6 @@ def parse_args() -> argparse.Namespace:
         'add',
         help='Add a new budget'
     )
-    add_b = budget_sub.add_parser(
-        'add',
-        help='Add a new budget'
-    )
     add_b.add_argument(
         '-c', '--category',
         required=True,
@@ -218,6 +214,9 @@ def main() -> int:
         if args.budget_command == 'add':
             try:
                 limit = Decimal(args.limit)
+                # Reject NaN or infinite values
+                if not limit.is_finite():
+                    raise InvalidOperation()
             except InvalidOperation:
                 print(f"Invalid limit: {args.limit}", file=sys.stderr)
                 return 1
