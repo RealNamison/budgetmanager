@@ -12,6 +12,7 @@ import argparse
 import argcomplete
 import sys
 import calendar
+import sqlite3
 from pathlib import Path
 from decimal import Decimal, InvalidOperation
 
@@ -75,6 +76,17 @@ def parse_args() -> argparse.Namespace:
         help='Show total balance, income, and expenses'
     )
 
+    # Remove transaction
+    remove_p = subparsers.add_parser(
+        'remove',
+        help='Remove a transaction by ID'
+    )
+    remove_p.add_argument(
+        '-i', '--id',
+        type=int, required=True,
+        help='ID of the transaction to remove'
+    )
+
     # Summary
     sum_p = subparsers.add_parser(
         'summary',
@@ -124,6 +136,16 @@ def parse_args() -> argparse.Namespace:
     budget_sub.add_parser(
         'list',
         help='List all budgets'
+    )
+
+    remove_b = budget_sub.add_parser(
+        'remove',
+        help='Remove a budget by category'
+    )
+    remove_b.add_argument(
+        '-c', '--category',
+        required=True,
+        help='Category of the budget to remove'
     )
 
     # Chart
@@ -176,7 +198,11 @@ def main() -> int:
                 return 1
 
             budget = Budget(category=args.category, limit=limit)
-            handler.add_budget(budget)
+            try:
+                handler.add_budget(budget)
+            except sqlite3.Errorq as e:
+                print(f"Error adding budget '{args.category}': {e}", file=sys.stderr)
+                return 1
             print(f"Set budget: {budget.category} -> {budget.limit}")
             return 0
 
@@ -189,29 +215,53 @@ def main() -> int:
                     print(f"{b.category}: {b.limit}")
             return 0
 
+        if args.budget_command == 'remove':
+            category = args.category
+            try:
+                handler.remove_budget(category)
+            except sqlite3.Error as e:
+                print(f"Error removing budget '{category}': {e}",
+                      file=sys.stderr)
+                return 1
+            print(f"Removed budget for category '{category}'")
+            return 0
+
     # --- Add transaction ---
     if args.command == 'add':
+        # 1. Parse timestamp and handle errors
         if args.timestamp:
-            ts = Timestamp.from_isoformat(args.timestamp)
+            try:
+                ts = Timestamp.from_isoformat(args.timestamp)
+            except ValueError as e:
+                print(f"Invalid timestamp: {args.timestamp}", file=sys.stderr)
+                return 1
         else:
             ts = Timestamp.now()
 
+        # 2. Parse amount as Decimal and handle errors
         try:
             amt = Decimal(args.amount)
         except InvalidOperation:
             print(f"Invalid amount: {args.amount}", file=sys.stderr)
             return 1
 
+        # 3. Create Transaction object
         tx = Transaction(
             timestamp=ts,
             category=args.category,
             amount=amt,
             description=args.description
         )
-        handler.add_transaction(tx)
-        ledger.add_transaction(tx)
 
-        # Budget warning on overspend
+        # 4. Wrap DB access in try/except sqlite3.Error
+        try:
+            handler.add_transaction(tx)
+            ledger.add_transaction(tx)
+        except sqlite3.Error as e:
+            print(f"Error adding transaction: {e}", file=sys.stderr)
+            return 1
+
+        # 5. Budget warning on overspend
         budgets = handler.get_budgets()
         now = Timestamp.now()
         year, month = now.year, now.month
@@ -242,6 +292,17 @@ def main() -> int:
         else:
             for t in ledger:
                 print(t)
+        return 0
+
+    # --- Remove transaction ---
+    if args.command == 'remove':
+        tx_id = args.id
+        try:
+            handler.remove_transaction(tx_id)
+        except sqlite3.Error as e:
+            print(f"Error removing transaction: {e}", file=sys.stderr)
+            return 1
+        print(f"Removed transaction with ID {tx_id}")
         return 0
 
     # --- Show balance ---
