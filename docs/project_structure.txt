@@ -57,6 +57,7 @@ budgetmanager/
 │   │   ├── test_timestamp.py
 │   │   └── test_transaction.py
 │   └── conftest.py
+├── .flake8
 ├── .gitignore
 ├── LICENSE
 ├── mkdocs.yml
