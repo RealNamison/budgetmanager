@@ -197,7 +197,9 @@ def test_truediv_transaction_and_scalar(txn, sample_ts):
 
 
 def test_division_by_zero(sample_ts):
-    """Division by zero (transaction or scalar) must raise ZeroDivisionError."""
+    """
+    Division by zero (transaction or scalar) must raise ZeroDivisionError.
+    """
     zero_txn = Transaction(sample_ts, "z", Decimal("0"), "")
     t = Transaction(sample_ts, "t", Decimal("100"), "")
     with pytest.raises(ZeroDivisionError):
@@ -219,7 +221,9 @@ def test_truediv_invalid_type(txn):
 
 
 def test_from_dict_missing_keys(sample_ts):
-    """from_dict without 'description' or 'amount' or 'category' raises KeyError."""
+    """
+    from_dict without 'description' or 'amount' or 'category' raises KeyError.
+    """
     incomplete = {
         "timestamp": sample_ts.to_isoformat(),
         "category": "x",

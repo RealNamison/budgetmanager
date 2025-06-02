@@ -11,7 +11,6 @@ under data/processed/charts/.
 from __future__ import annotations
 
 from decimal import Decimal
-from datetime import date, time
 from pathlib import Path
 from typing import Dict, Set
 

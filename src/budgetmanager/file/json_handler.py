@@ -15,7 +15,8 @@ from .file_handler import FileHandler
 
 import warnings
 warnings.warn(
-    "JSONHandler is deprecated and will be removed in version 2; please use SQLite.",
+    "JSONHandler is deprecated and will be removed in version 2; "
+    "please use SQLite.",
     DeprecationWarning,
     stacklevel=2
 )
@@ -63,16 +64,23 @@ class JSONHandler:
                 return json.load(f)
         except json.JSONDecodeError as e:
             # Provide context on JSON parsing error
-            raise json.JSONDecodeError(f"Failed to parse JSON file '{file_path}': {e.msg}", e.doc, e.pos) from e
+            raise json.JSONDecodeError(
+                f"Failed to parse JSON file '{file_path}': {e.msg}",
+                e.doc,
+                e.pos
+            ) from e
         except OSError as e:
             # Contextualize file opening errors
-            raise OSError(f"Failed to open JSON file '{file_path}': {e.strerror}") from e
+            raise OSError(
+                f"Failed to open JSON file '{file_path}': {e.strerror}"
+            ) from e
 
     @staticmethod
     def save_json(data: Any, *paths: str) -> Path:
         """
-        Saves Python data as JSON to a file located in DATA_ROOT or via absolute path.
-        Uses FileHandler.create_file to ensure the file exists before writing.
+        Saves Python data as JSON to a file located in DATA_ROOT
+        or via absolute path. Uses FileHandler.create_file to ensure
+        the file exists before writing.
 
         Args:
             data (Any): The Python object to serialize to JSON.
@@ -84,20 +92,23 @@ class JSONHandler:
         Raises:
             OSError: For I/O related errors when creating or writing the file.
         """
-        # Resolve the file path
         file_path: Path = FileHandler.get_file_path(*paths)
-        # Ensure the file exists
         try:
-            FileHandler.create_file(str(file_path.parent), file_path.stem, "json")
+            FileHandler.create_file(
+                str(file_path.parent),
+                file_path.stem, "json"
+            )
         except OSError as e:
-            raise OSError(f"Cannot ensure file exists at '{file_path}': {e}") from e
+            raise OSError(
+                f"Cannot ensure file exists at '{file_path}': {e}"
+            ) from e
 
-        # Write JSON data as a string
         json_str = json.dumps(data, indent=4)
         try:
-            # Use Path.write_text to write the JSON string, avoiding type mismatch
             file_path.write_text(json_str, encoding='utf-8')
         except OSError as e:
-            raise OSError(f"Failed to write JSON file '{file_path}': {e.strerror}") from e
+            raise OSError(
+                f"Failed to write JSON file '{file_path}': {e.strerror}"
+            ) from e
 
         return file_path

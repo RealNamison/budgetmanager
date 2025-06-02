@@ -6,7 +6,6 @@ with two sample transactions (income & expense).
 """
 
 from decimal import Decimal
-from pathlib import Path
 
 import pytest
 
@@ -68,7 +67,10 @@ def test_generate_chart_empty(capsys) -> None:
 
 
 def test_generate_chart_ascii_only(sample_ledger, capsys) -> None:
-    """Verify ASCII output for the sample_ledger fixture (one income, one expense)."""
+    """
+    Verify ASCII output for the sample_ledger fixture
+    (one income, one expense).
+    """
     start = Timestamp.from_components(2025, 1, 1)
     end = Timestamp.from_components(2025, 1, 1, 23, 59, 59, 999_999)
 

@@ -3,9 +3,9 @@
 """
 Module for creating and manipulating Timestamp objects.
 
-This module provides the Timestamp class which encapsulates separate date and time
-components and offers methods for instantiation from various sources, conversion
-to datetime and float timestamp, and comparison operations.
+This module provides the Timestamp class which encapsulates separate date
+and time components and offers methods for instantiation from various sources,
+conversion to datetime and float timestamp, and comparison operations.
 """
 
 from __future__ import annotations
@@ -20,7 +20,8 @@ class Timestamp:
 
     Provides methods to:
         - Instantiate with explicit date and time.
-        - Instantiate from individual components (year, month, day, hour, minute, second, microsecond).
+        - Instantiate from individual components
+          (year, month, day, hour, minute, second, microsecond).
         - Create current timestamp.
         - Instantiate from datetime object.
         - Instantiate from ISO formatted string.
@@ -42,9 +43,15 @@ class Timestamp:
             TypeError: If time_obj is not a datetime.time instance.
         """
         if not isinstance(date_obj, date):
-            raise TypeError(f"date_obj must be datetime.date, got {type(date_obj).__name__}")
+            raise TypeError(
+                f"date_obj must be datetime.date, "
+                f"got {type(date_obj).__name__}"
+            )
         if not isinstance(time_obj, time):
-            raise TypeError(f"time_obj must be datetime.time, got {type(time_obj).__name__}")
+            raise TypeError(
+                "time_obj must be datetime.time, "
+                f"got {type(time_obj).__name__}"
+            )
         self.date = date_obj
         self.time = time_obj
 
@@ -104,13 +111,15 @@ class Timestamp:
             hour (int): The hour component (0-23). Defaults to 0.
             minute (int): The minute component (0-59). Defaults to 0.
             second (int): The second component (0-59). Defaults to 0.
-            microsecond (int): The microsecond component (0-999999). Defaults to 0.
+            microsecond (int): The microsecond component (0-999999).
+                               Defaults to 0.
 
         Returns:
             Timestamp: A Timestamp representing the specified components.
 
         Raises:
-            ValueError: If the provided components do not form a valid date or time.
+            ValueError: If the provided components do not
+                        form a valid date or time.
         """
         date_obj = date(year, month, day)
         time_obj = time(hour, minute, second, microsecond)
@@ -142,7 +151,9 @@ class Timestamp:
             TypeError: If dt is not a datetime.datetime instance.
         """
         if not isinstance(dt, datetime):
-            raise TypeError(f"dt must be datetime.datetime, got {type(dt).__name__}")
+            raise TypeError(
+                f"dt must be datetime.datetime, got {type(dt).__name__}"
+            )
         return cls(dt.date(), dt.time())
 
     @classmethod
@@ -151,7 +162,8 @@ class Timestamp:
         Creates a Timestamp from an ISO 8601 formatted string.
 
         Args:
-            iso_str (str): A string in ISO format 'YYYY-MM-DD[T]HH:MM:SS[.ffffff]'.
+            iso_str (str): A string in ISO format
+                           'YYYY-MM-DD[T]HH:MM:SS[.ffffff]'.
 
         Returns:
             Timestamp: A Timestamp parsed from the given string.
@@ -208,12 +220,16 @@ class Timestamp:
         Returns:
             str: The representation of the Timestamp including date and time.
         """
-        # Represent using date() and time() without module prefix for readability
-        date_part = f"date({self.date.year}, {self.date.month}, {self.date.day})"
-        time_part = (
-            f"time({self.time.hour}, {self.time.minute}, {self.time.second}, {self.time.microsecond})"
+        date_part = (
+            f"date({self.date.year}, {self.date.month}, {self.date.day})"
         )
-        return f"{self.__class__.__name__}(date={date_part}, time={time_part})"
+        time_part = (
+            f"time({self.time.hour}, {self.time.minute}, "
+            f"{self.time.second}, {self.time.microsecond})"
+        )
+        return (
+            f"{self.__class__.__name__}(date={date_part}, time={time_part})"
+        )
 
     def __eq__(self, other: object) -> bool:
         """
@@ -223,7 +239,8 @@ class Timestamp:
             other (object): The object to compare against.
 
         Returns:
-            bool: True if other is a Timestamp with the same date and time, False otherwise.
+            bool: True if other is a Timestamp with the same date and time,
+                  False otherwise.
         """
         if not isinstance(other, Timestamp):
             return NotImplemented
@@ -237,7 +254,8 @@ class Timestamp:
             other (Timestamp): The other Timestamp to compare.
 
         Returns:
-            bool: True if this Timestamp is earlier than other, False otherwise.
+            bool: True if this Timestamp is earlier than other,
+                  False otherwise.
         """
         if not isinstance(other, Timestamp):
             return NotImplemented

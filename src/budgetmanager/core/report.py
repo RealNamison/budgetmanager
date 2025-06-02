@@ -18,7 +18,11 @@ class ReportGenerator:
     """Compute summaries and export them in different formats."""
 
     @staticmethod
-    def monthly_summary(ledger: Ledger, year: int, month: int) -> dict[str, Decimal]:
+    def monthly_summary(
+            ledger: Ledger,
+            year: int,
+            month: int
+    ) -> dict[str, Decimal]:
         """Compute total income, expenses and balance for a given month.
 
         Args:
@@ -100,7 +104,9 @@ class ReportGenerator:
             >>> start = Timestamp.from_isoformat("2025-01-01T00:00:00")
             >>> end = Timestamp.from_isoformat("2025-01-31T23:59:59")
             >>> ReportGenerator.range_summary(ledger, start, end)
-            {"income": Decimal("..."), "expenses": Decimal("..."), "balance": Decimal("...")}
+            {"income": Decimal("..."),
+             "expenses": Decimal("..."),
+             "balance": Decimal("...")}
         """
         if start > end:
             raise ValueError(f"Start {start} is after end {end}")

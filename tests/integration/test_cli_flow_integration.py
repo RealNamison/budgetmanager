@@ -54,16 +54,18 @@ def test_cli_no_command() -> None:
     assert result.returncode != 0
     assert "usage: budgetmgr" in result.stderr
 
-
 def test_cli_list_empty() -> None:
-    """'list'-Befehl ohne Transaktionen gibt Hinweis und Code 0 zurück."""
+    """
+    The 'list' command without any transactions
+    returns a notice and exit code 0.
+    """
     result = run_cmd(["list"])
     assert result.returncode == 0
     assert "No transactions found." in result.stdout
 
 
 def test_cli_balance_empty() -> None:
-    """'balance'-Befehl ohne Transaktionen zeigt 0 für alle Felder."""
+    """The 'balance' command with no transactions shows 0 for all fields."""
     result = run_cmd(["balance"])
     assert result.returncode == 0
     assert "Balance:  0" in result.stdout
@@ -72,7 +74,7 @@ def test_cli_balance_empty() -> None:
 
 
 def test_cli_add_and_list_default() -> None:
-    """Test that 'add' ohne Timestamp/Description und 'list' funktionieren."""
+    """Test that 'add' without timestamp/description and 'list' work."""
     res_add = run_cmd(["add", "-c", "test", "-a", "10.00"])
     assert res_add.returncode == 0
     assert "Added:" in res_add.stdout
@@ -83,7 +85,9 @@ def test_cli_add_and_list_default() -> None:
 
 
 def test_cli_add_with_timestamp_and_description() -> None:
-    """'add' mit -t und -d sollte richtigen Timestamp und Beschreibung nutzen."""
+    """
+    'add' with -t and -d should use the correct timestamp and description.
+    """
     ts = "2025-05-15T12:30:00"
     res = run_cmd([
         "add",
@@ -98,21 +102,21 @@ def test_cli_add_with_timestamp_and_description() -> None:
 
 
 def test_cli_invalid_amount() -> None:
-    """Ungültiger Betrag führt zu Fehlercode 1 und Fehlermeldung."""
+    """Invalid amount results in exit code 1 and an error message."""
     res = run_cmd(["add", "-c", "foo", "-a", "notnum"])
     assert res.returncode == 1
     assert "Invalid amount" in res.stderr
 
 
 def test_cli_invalid_timestamp() -> None:
-    """Ungültiges Timestamp-Format führt zu Fehlercode 1."""
+    """Invalid timestamp format results in exit code 1."""
     res = run_cmd(["add", "-t", "badtime", "-c", "foo", "-a", "1.00"])
     assert res.returncode == 1
     assert "Invalid timestamp" in res.stderr
 
 
 def test_cli_remove_transaction() -> None:
-    """'remove' entfernt eine Transaktion per ID."""
+    """'remove' removes a transaction by ID."""
     # Add a transaction
     run_cmd(["add", "-c", "remcat", "-a", "5.00"])
     # Directly query DB for ID
@@ -136,8 +140,10 @@ def test_cli_remove_transaction() -> None:
 
 
 def test_cli_summary_monthly_and_yearly() -> None:
-    """Test 'summary' mit Monat und ohne Monat sowie CSV-Export."""
-    # Add income und expense in Januar 2025
+    """
+    Test 'summary' with a month and without a month, including CSV export.
+    """
+    # Add income and expense in January 2025
     run_cmd(["add", "-t", "2025-01-10T00:00:00", "-c", "inc", "-a", "100"])
     run_cmd(["add", "-t", "2025-01-20T00:00:00", "-c", "exp", "-a", "-40"])
 
@@ -167,7 +173,7 @@ def test_cli_summary_monthly_and_yearly() -> None:
 
 
 def test_cli_chart_ascii_and_graphical_exports(tmp_path: Path) -> None:
-    """Test 'chart' ASCII, PNG- und SVG-Export sowie Fehlerfall."""
+    """Test 'chart' ASCII, PNG, and SVG export as well as error case."""
     # Seed some data
     run_cmd([
         "add", "-t", "2025-05-20T00:00:00",

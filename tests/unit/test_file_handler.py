@@ -13,7 +13,10 @@ from budgetmanager.file.file_handler import FileHandler
 
 
 def test_create_directory_absolute(tmp_path: Path):
-    """Test that create_directory creates an absolute directory when given an absolute path."""
+    """
+    Test that create_directory creates an absolute directory
+    when given an absolute path.
+    """
     abs_dir = tmp_path / "abs_test"
     result = FileHandler.create_directory(str(abs_dir))
     assert result.exists() and result.is_dir()
@@ -21,7 +24,10 @@ def test_create_directory_absolute(tmp_path: Path):
 
 
 def test_create_directory_relative(tmp_path: Path, monkeypatch):
-    """Test that create_directory creates a directory under DATA_ROOT for relative paths."""
+    """
+    Test that create_directory creates a directory
+    under DATA_ROOT for relative paths.
+    """
     monkeypatch.setattr(config, "DATA_ROOT", tmp_path)
     rel_dir = "rel_test"
     result = FileHandler.create_directory(rel_dir)
@@ -42,7 +48,10 @@ def test_create_file_absolute(tmp_path: Path):
 
 
 def test_create_file_relative(tmp_path: Path, monkeypatch):
-    """Test that create_file creates a file under DATA_ROOT when using a relative directory."""
+    """
+    Test that create_file creates a file
+    under DATA_ROOT when using a relative directory.
+    """
     monkeypatch.setattr(config, "DATA_ROOT", tmp_path)
     rel_dir = "file_rel"
     file_name = "test"
@@ -54,7 +63,9 @@ def test_create_file_relative(tmp_path: Path, monkeypatch):
 
 
 def test_get_directory_path(tmp_path: Path, monkeypatch):
-    """Test get_directory_path returns a path under DATA_ROOT for components."""
+    """
+    Test get_directory_path returns a path under DATA_ROOT for components.
+    """
     monkeypatch.setattr(config, "DATA_ROOT", tmp_path)
     result = FileHandler.get_directory_path("a", "b", "c")
     expected = tmp_path / "a" / "b" / "c"
@@ -62,7 +73,10 @@ def test_get_directory_path(tmp_path: Path, monkeypatch):
 
 
 def test_get_file_path(tmp_path: Path, monkeypatch):
-    """Test get_file_path returns a file path under DATA_ROOT for components."""
+    """
+    Test get_file_path returns a file path
+    under DATA_ROOT for components.
+    """
     monkeypatch.setattr(config, "DATA_ROOT", tmp_path)
     result = FileHandler.get_file_path("dir", "file.txt")
     expected = tmp_path / "dir" / "file.txt"
@@ -70,7 +84,10 @@ def test_get_file_path(tmp_path: Path, monkeypatch):
 
 
 def test_create_directory_error_when_file_exists(tmp_path: Path, monkeypatch):
-    """Test that create_directory raises OSError when a file exists at the target path."""
+    """
+    Test that create_directory raises OSError when
+    a file exists at the target path.
+    """
     monkeypatch.setattr(config, 'DATA_ROOT', tmp_path)
     conflict_path = tmp_path / 'conflict'
     conflict_path.write_text('I am a file, not a directory')
@@ -93,7 +110,10 @@ def test_create_file_error_when_parent_is_file(tmp_path: Path, monkeypatch):
     assert 'parent.txt' in msg
 
 
-def test_get_directory_path_absolute_ignores_data_root(tmp_path: Path, monkeypatch):
+def test_get_directory_path_absolute_ignores_data_root(
+        tmp_path: Path,
+        monkeypatch
+):
     """Test get_directory_path returns the absolute path ignoring DATA_ROOT."""
     monkeypatch.setattr(config, 'DATA_ROOT', tmp_path / 'will_not_be_used')
     abs_path = tmp_path / 'abs' / 'dir'
@@ -138,7 +158,7 @@ def test_create_file_idempotent(tmp_path, monkeypatch):
     ts2 = path2.stat().st_mtime
     assert path1 == path2
     assert path1.exists()
-    # Optional: ts2 >= ts1
+    assert ts2 >= ts1
 
 
 def test_get_directory_path_multi_segments(tmp_path, monkeypatch):

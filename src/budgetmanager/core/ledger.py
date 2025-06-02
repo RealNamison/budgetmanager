@@ -190,7 +190,8 @@ class Ledger:
 
         if not isinstance(tx_dicts, list):
             raise TypeError(
-                f"'transactions' must be a list, got {type(tx_dicts).__name__}"
+                "'transactions' must be a list, got "
+                f"{type(tx_dicts).__name__}"
             )
 
         transactions: list[Transaction] = []
@@ -198,7 +199,9 @@ class Ledger:
             try:
                 tx = Transaction.from_dict(tx_data)
             except Exception as e:
-                raise ValueError(f"Invalid transaction data: {tx_data}") from e
+                raise ValueError(
+                    f"Invalid transaction data: {tx_data}"
+                ) from e
             transactions.append(tx)
 
         return cls(transactions)
@@ -372,7 +375,8 @@ class Ledger:
         Create a shallow copy of the ledger.
 
         Returns:
-            Ledger: A new Ledger instance with a shallow copy of the transactions list.
+            Ledger: A new Ledger instance with a shallow copy
+                    of the transactions list.
 
         Examples:
             >>> from copy import copy
@@ -388,7 +392,8 @@ class Ledger:
             memo (dict): Memoization dict for objects already copied.
 
         Returns:
-            Ledger: A new Ledger instance with a deep copy of the transactions list.
+            Ledger: A new Ledger instance with a deep copy
+                    of the transactions list.
 
         Examples:
             >>> from copy import deepcopy

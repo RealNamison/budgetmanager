@@ -3,7 +3,8 @@
 """
 Unit tests for the ReportGenerator class in report.py.
 
-This module tests monthly_summary, yearly_summary, and CSV export functionality.
+This module tests monthly_summary, yearly_summary,
+and CSV export functionality.
 """
 
 import csv
@@ -149,6 +150,7 @@ def test_export_to_csv(tmp_path: Path) -> None:
     assert content["expenses"] == "-67.89"
     assert content["balance"] == "55.56"
 
+
 def test_monthly_summary_february_leap_year() -> None:
     """
     Test that monthly_summary includes transactions on Feb 29 of a leap
@@ -230,7 +232,8 @@ def test_range_summary_empty() -> None:
 
 def test_range_summary_partial_span() -> None:
     """
-    Test that range_summary correctly aggregates transactions between two dates.
+    Test that range_summary correctly aggregates
+    transactions between two dates.
 
     Range covers the expense on May 15 and the income on June 10.
     """

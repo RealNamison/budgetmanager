@@ -16,7 +16,9 @@ from budgetmanager.utils.timestamp import Timestamp
 
 @pytest.fixture(autouse=True)
 def patch_create_directory(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Disable actual directory creation in FileHandler to avoid FS side effects."""
+    """
+    Disable actual directory creation in FileHandler to avoid FS side effects.
+    """
     monkeypatch.setattr(
         'budgetmanager.file.file_handler.FileHandler.create_directory',
         lambda path: Path(path),
@@ -40,9 +42,17 @@ def test_empty_db_returns_no_transactions(handler: SQLiteHandler) -> None:
 
 
 def test_add_and_get_transaction(handler: SQLiteHandler) -> None:
-    """add_transaction() followed by get_all_transactions() returns the inserted tx."""
+    """
+    add_transaction() followed by get_all_transactions()
+    returns the inserted tx.
+    """
     ts = Timestamp.from_components(2025, 5, 22, 12, 0, 0)
-    tx = Transaction(timestamp=ts, category="test", amount=Decimal("9.99"), description="Lunch")
+    tx = Transaction(
+        timestamp=ts,
+        category="test",
+        amount=Decimal("9.99"),
+        description="Lunch"
+    )
     handler.add_transaction(tx)
     txs = handler.get_all_transactions()
     assert txs == [tx]
@@ -51,7 +61,8 @@ def test_add_and_get_transaction(handler: SQLiteHandler) -> None:
 def test_remove_transaction(handler: SQLiteHandler) -> None:
     """
     remove_transaction() deletes by ID.
-    First insert two transactions, remove the first (ID=1), only second remains.
+    First insert two transactions, remove the first (ID=1),
+    only second remains.
     """
     ts = Timestamp.from_components(2025, 5, 22)
     t1 = Transaction(ts, "a", Decimal("1.00"), "one")

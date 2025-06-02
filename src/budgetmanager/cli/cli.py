@@ -16,7 +16,6 @@ except ImportError:
 import sys
 import calendar
 import sqlite3
-from pathlib import Path
 from decimal import Decimal, InvalidOperation
 
 from ..config import DATA_ROOT
@@ -225,7 +224,10 @@ def main() -> int:
             try:
                 handler.add_budget(budget)
             except sqlite3.Error as e:
-                print(f"Error adding budget '{args.category}': {e}", file=sys.stderr)
+                print(
+                    f"Error adding budget '{args.category}': {e}",
+                    file=sys.stderr
+                )
                 return 1
             print(f"Set budget: {budget.category} -> {budget.limit}")
             return 0
@@ -244,8 +246,10 @@ def main() -> int:
             try:
                 handler.remove_budget(category)
             except sqlite3.Error as e:
-                print(f"Error removing budget '{category}': {e}",
-                      file=sys.stderr)
+                print(
+                    f"Error removing budget '{category}': {e}",
+                    file=sys.stderr
+                )
                 return 1
             print(f"Removed budget for category '{category}'")
             return 0
@@ -256,8 +260,11 @@ def main() -> int:
         if args.timestamp:
             try:
                 ts = Timestamp.from_isoformat(args.timestamp)
-            except ValueError as e:
-                print(f"Invalid timestamp: {args.timestamp}", file=sys.stderr)
+            except ValueError:
+                print(
+                    f"Invalid timestamp: {args.timestamp}",
+                    file=sys.stderr
+                )
                 return 1
         else:
             ts = Timestamp.now()
@@ -332,17 +339,26 @@ def main() -> int:
         try:
             deleted_tx = handler.remove_transaction(tx_id)
         except sqlite3.Error as e:
-            print(f"Error removing transaction from database: {e}", file=sys.stderr)
+            print(
+                f"Error removing transaction from database: {e}",
+                file=sys.stderr
+            )
             return 1
 
         if deleted_tx is None:
-            print(f"No transaction with ID {tx_id} found.", file=sys.stderr)
+            print(
+                f"No transaction with ID {tx_id} found.",
+                file=sys.stderr
+            )
             return 1
 
         try:
             ledger.remove_transaction(deleted_tx)
         except ValueError as e:
-            print(f"Error removing transaction from ledger: {e}", file=sys.stderr)
+            print(
+                f"Error removing transaction from ledger: {e}",
+                file=sys.stderr
+            )
             return 1
 
         print(f"Removed transaction with ID {tx_id}")
@@ -376,7 +392,10 @@ def main() -> int:
                     ledger, start_ts, end_ts
                 )
             except ValueError as e:
-                print(f"Error generating range summary: {e}", file=sys.stderr)
+                print(
+                    f"Error generating range summary: {e}",
+                    file=sys.stderr
+                )
                 return 1
 
             # use raw inputs for label
@@ -384,7 +403,10 @@ def main() -> int:
         else:
             # fall back to year/month summaries
             if args.year is None:
-                print("Year is required when not using --range", file=sys.stderr)
+                print(
+                    "Year is required when not using --range",
+                    file=sys.stderr
+                )
                 return 1
 
             if args.month:

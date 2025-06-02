@@ -7,10 +7,7 @@ Verifies that FileHandler.create_file and JSONHandler.save_json/load_json
 can create, write, and read a JSON file correctly.
 """
 
-import json
 from pathlib import Path
-
-import pytest
 
 from budgetmanager.file.file_handler import FileHandler
 from budgetmanager.file.json_handler import JSONHandler

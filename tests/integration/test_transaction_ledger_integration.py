@@ -8,11 +8,10 @@ category, and that the ledger balance is computed correctly.
 """
 
 from decimal import Decimal
-import pytest
 
-from budgetmanager.core.transaction import Transaction  # :contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}
-from budgetmanager.core.ledger import Ledger  # :contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}
-from budgetmanager.utils.timestamp import Timestamp  # :contentReference[oaicite:4]{index=4}:contentReference[oaicite:5]{index=5}
+from budgetmanager.core.transaction import Transaction
+from budgetmanager.core.ledger import Ledger
+from budgetmanager.utils.timestamp import Timestamp
 
 
 def test_add_filter_and_balance() -> None:

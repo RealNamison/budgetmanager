@@ -18,7 +18,9 @@ from budgetmanager.utils.timestamp import Timestamp
 
 
 def test_init_valid():
-    """Test that initializing with valid date and time sets attributes correctly."""
+    """
+    Test that initializing with valid date and time sets attributes correctly.
+    """
     d = date(2025, 1, 2)
     t = time(3, 4, 5, 6)
     ts = Timestamp(d, t)
@@ -111,7 +113,10 @@ def test_to_datetime_and_str_repr():
 
 
 def test_float():
-    """Test __float__ returns the POSIX timestamp (seconds since epoch) including fractional seconds."""
+    """
+    Test __float__ returns the POSIX timestamp (seconds since epoch)
+    including fractional seconds.
+    """
     ts = Timestamp.from_components(2000, 1, 2, 3, 4, 5, 600000)
     dt = ts.to_datetime()
     expected = dt.timestamp()

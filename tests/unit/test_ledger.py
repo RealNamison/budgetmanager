@@ -172,7 +172,8 @@ def test_to_dict_and_from_dict_roundtrip(sample_transactions):
 
 def test_from_dict_missing_key_raises_key_error():
     """
-    Test that from_dict() raises KeyError when the 'transactions' key is missing.
+    Test that from_dict() raises KeyError
+    when the 'transactions' key is missing.
     """
     with pytest.raises(KeyError):
         Ledger.from_dict({})
@@ -239,7 +240,9 @@ def test_equality_and_add_iadd(sample_transactions):
     assert l1 == l2
     l2.transactions.reverse()
     assert not (l1 == l2)
-    combined = Ledger([sample_transactions[0]]) + Ledger([sample_transactions[1]])
+    l1_single = Ledger([sample_transactions[0]])
+    l2_single = Ledger([sample_transactions[1]])
+    combined = l1_single + l2_single
     assert isinstance(combined, Ledger)
     assert len(combined) == 2
     l3 = Ledger([sample_transactions[0]])

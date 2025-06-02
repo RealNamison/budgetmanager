@@ -10,8 +10,6 @@ and that summaries can be exported to CSV.
 from decimal import Decimal
 from pathlib import Path
 
-import pytest
-
 from budgetmanager.core.ledger import Ledger
 from budgetmanager.core.transaction import Transaction
 from budgetmanager.core.report import ReportGenerator

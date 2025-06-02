@@ -172,7 +172,8 @@ class Transaction:
         return NotImplemented
 
     def __rsub__(self, other: Any) -> Decimal:
-        """Support scalar - Transaction → number minus this transaction's amount.
+        """
+        Support scalar - Transaction → number minus this transaction's amount.
 
         Args:
             other (int | float | Decimal): Left-hand scalar operand.
@@ -261,7 +262,9 @@ class Transaction:
         return NotImplemented
 
     def __rtruediv__(self, other: Any) -> Decimal:
-        """Support scalar / Transaction → number divided by this transaction's amount.
+        """
+        Support scalar / Transaction
+        → number divided by this transaction's amount.
 
         Args:
             other (int | float | Decimal): Left-hand scalar operand.
@@ -326,7 +329,9 @@ class Transaction:
         try:
             ts = Timestamp.from_isoformat(data["timestamp"])
         except Exception as e:
-            raise ValueError(f"Invalid timestamp: {data.get('timestamp')}") from e
+            raise ValueError(
+                f"Invalid timestamp: {data.get('timestamp')}"
+            ) from e
 
         # Amount parsing
         try:
