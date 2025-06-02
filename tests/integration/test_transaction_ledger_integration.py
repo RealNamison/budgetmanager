@@ -27,13 +27,13 @@ def test_add_filter_and_balance() -> None:
         timestamp=Timestamp.from_components(2025, 1, 1),
         category="income",
         amount=Decimal("100.00"),
-        description="Salary"
+        description="Salary",
     )
     t2 = Transaction(
         timestamp=Timestamp.from_components(2025, 1, 5),
         category="expense",
         amount=Decimal("-30.00"),
-        description="Groceries"
+        description="Groceries",
     )
     ledger = Ledger()
 

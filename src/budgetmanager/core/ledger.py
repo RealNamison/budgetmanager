@@ -105,7 +105,7 @@ class Ledger:
         """
         return sum(
             (t.amount for t in self.transactions if t.is_income()),
-            Decimal("0")
+            Decimal("0"),
         )
 
     def total_expenses(self) -> Decimal:
@@ -117,7 +117,7 @@ class Ledger:
         """
         return sum(
             (t.amount for t in self.transactions if t.is_expense()),
-            Decimal("0")
+            Decimal("0"),
         )
 
     def filter_by_category(self, category: str) -> list[Transaction]:
@@ -145,10 +145,7 @@ class Ledger:
         Returns:
             list[Transaction]: Transactions in the specified range.
         """
-        return [
-            t for t in self.transactions
-            if start <= t.timestamp <= end
-        ]
+        return [t for t in self.transactions if start <= t.timestamp <= end]
 
     def to_dict(self) -> dict[str, list[dict]]:
         """
@@ -199,9 +196,7 @@ class Ledger:
             try:
                 tx = Transaction.from_dict(tx_data)
             except Exception as e:
-                raise ValueError(
-                    f"Invalid transaction data: {tx_data}"
-                ) from e
+                raise ValueError(f"Invalid transaction data: {tx_data}") from e
             transactions.append(tx)
 
         return cls(transactions)

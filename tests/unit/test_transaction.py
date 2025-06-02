@@ -40,8 +40,7 @@ def test_repr_contains_class_and_fields(txn):
 def test_str_format(txn, sample_ts):
     """__str__ must match '<ISO> | category: amount (description)'."""
     expected = (
-        f"{sample_ts.to_isoformat()} | salary: 1000.00 "
-        f"(Monthly salary)"
+        f"{sample_ts.to_isoformat()} | salary: 1000.00 " f"(Monthly salary)"
     )
     assert str(txn) == expected
 
@@ -70,11 +69,15 @@ def test_is_income_and_is_expense():
     """is_income/is_expense are based on sign of amount."""
     t_pos = Transaction(
         timestamp=Timestamp.from_components(2020, 1, 1),
-        category="test", amount=Decimal("10"), description=""
+        category="test",
+        amount=Decimal("10"),
+        description="",
     )
     t_neg = Transaction(
         timestamp=Timestamp.from_components(2020, 1, 1),
-        category="test", amount=Decimal("-5"), description=""
+        category="test",
+        amount=Decimal("-5"),
+        description="",
     )
     assert t_pos.is_income() and not t_pos.is_expense()
     assert t_neg.is_expense() and not t_neg.is_income()
@@ -84,12 +87,16 @@ def test_bool():
     """__bool__ is False only for amount == 0."""
     zero = Transaction(
         timestamp=Timestamp.from_components(2020, 1, 1),
-        category="foo", amount=Decimal("0"), description=""
+        category="foo",
+        amount=Decimal("0"),
+        description="",
     )
     assert not zero
     non_zero = Transaction(
         timestamp=Timestamp.from_components(2020, 1, 1),
-        category="foo", amount=Decimal("1"), description=""
+        category="foo",
+        amount=Decimal("1"),
+        description="",
     )
     assert non_zero
 
@@ -117,7 +124,8 @@ def test_equality_and_inequality(txn, sample_ts):
     txn_diff = Transaction(
         timestamp=sample_ts,
         category="rent",
-        amount=Decimal("500"), description="Rent"
+        amount=Decimal("500"),
+        description="Rent",
     )
     assert txn == txn_same
     assert txn != txn_diff

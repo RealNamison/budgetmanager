@@ -19,9 +19,7 @@ class ReportGenerator:
 
     @staticmethod
     def monthly_summary(
-            ledger: Ledger,
-            year: int,
-            month: int
+        ledger: Ledger, year: int, month: int
     ) -> dict[str, Decimal]:
         """Compute total income, expenses and balance for a given month.
 
@@ -52,8 +50,11 @@ class ReportGenerator:
         txs = ledger.filter_by_date_range(start, end)
         income = sum((t.amount for t in txs if t.is_income()), Decimal("0"))
         expenses = sum((t.amount for t in txs if t.is_expense()), Decimal("0"))
-        return {"income": income, "expenses": expenses,
-                "balance": income + expenses}
+        return {
+            "income": income,
+            "expenses": expenses,
+            "balance": income + expenses,
+        }
 
     @staticmethod
     def yearly_summary(ledger: Ledger, year: int) -> dict[str, Decimal]:
@@ -72,14 +73,15 @@ class ReportGenerator:
         txs = ledger.filter_by_date_range(start, end)
         income = sum((t.amount for t in txs if t.is_income()), Decimal("0"))
         expenses = sum((t.amount for t in txs if t.is_expense()), Decimal("0"))
-        return {"income": income, "expenses": expenses,
-                "balance": income + expenses}
+        return {
+            "income": income,
+            "expenses": expenses,
+            "balance": income + expenses,
+        }
 
     @staticmethod
     def range_summary(
-            ledger: Ledger,
-            start: Timestamp,
-            end: Timestamp
+        ledger: Ledger, start: Timestamp, end: Timestamp
     ) -> dict[str, Decimal]:
         """Compute total income, expenses and balance between two timestamps.
 
@@ -117,7 +119,7 @@ class ReportGenerator:
         return {
             "income": income,
             "expenses": expenses,
-            "balance": income + expenses
+            "balance": income + expenses,
         }
 
     @staticmethod

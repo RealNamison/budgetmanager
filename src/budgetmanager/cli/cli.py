@@ -9,6 +9,7 @@ and manage budgets with warning on overspend.
 """
 
 import argparse
+
 try:
     import argcomplete
 except ImportError:
@@ -35,161 +36,124 @@ def parse_args() -> argparse.Namespace:
         argparse.Namespace: Parsed arguments.
     """
     parser = argparse.ArgumentParser(
-        prog='budgetmgr',
-        description='Manage your financial ledger.'
+        prog="budgetmgr", description="Manage your financial ledger."
     )
-    subparsers = parser.add_subparsers(
-        dest='command',
-        required=True
-    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
 
     # Add transaction
-    add_p = subparsers.add_parser(
-        'add',
-        help='Add a new transaction'
+    add_p = subparsers.add_parser("add", help="Add a new transaction")
+    add_p.add_argument(
+        "-t", "--timestamp", help="ISO timestamp of the transaction"
     )
     add_p.add_argument(
-        '-t', '--timestamp',
-        help='ISO timestamp of the transaction'
-    )
-    add_p.add_argument(
-        '-c', '--category',
+        "-c",
+        "--category",
         required=True,
-        help='Category or tag for the transaction'
+        help="Category or tag for the transaction",
     )
     add_p.add_argument(
-        '-a', '--amount',
+        "-a",
+        "--amount",
         required=True,
-        help='Amount (positive for income, negative for expense)'
+        help="Amount (positive for income, negative for expense)",
     )
     add_p.add_argument(
-        '-d', '--description',
-        default='',
-        help='Short description'
+        "-d", "--description", default="", help="Short description"
     )
 
     # List and balance
     list_p = subparsers.add_parser(
-        'list',
-        help='List transactions with optional limit and reverse order'
+        "list", help="List transactions with optional limit and reverse order"
     )
     list_p.add_argument(
-        '-n', '--limit',
-        type=int,
-        help='Show only the last N transactions'
+        "-n", "--limit", type=int, help="Show only the last N transactions"
     )
     list_p.add_argument(
-        '-r', '--reverse',
-        action='store_true',
-        help='Reverse the order of transactions'
+        "-r",
+        "--reverse",
+        action="store_true",
+        help="Reverse the order of transactions",
     )
     subparsers.add_parser(
-        'balance',
-        help='Show total balance, income, and expenses'
+        "balance", help="Show total balance, income, and expenses"
     )
 
     # Remove transaction
     remove_p = subparsers.add_parser(
-        'remove',
-        help='Remove a transaction by ID'
+        "remove", help="Remove a transaction by ID"
     )
     remove_p.add_argument(
-        '-i', '--id',
-        type=int, required=True,
-        help='ID of the transaction to remove'
+        "-i",
+        "--id",
+        type=int,
+        required=True,
+        help="ID of the transaction to remove",
     )
 
     # Summary: monthly, yearly or custom range
     sum_p = subparsers.add_parser(
-        'summary',
-        help='Show monthly, yearly or custom range summary'
+        "summary", help="Show monthly, yearly or custom range summary"
     )
     # require either a year or a start/end range
     sum_group = sum_p.add_mutually_exclusive_group(required=True)
     sum_group.add_argument(
-        '--year', '-y',
-        type=int,
-        help='Four-digit year, e.g. 2025'
+        "--year", "-y", type=int, help="Four-digit year, e.g. 2025"
     )
     sum_group.add_argument(
-        '--range',
+        "--range",
         nargs=2,
-        metavar=('START', 'END'),
-        help='Start and end timestamps in ISO format'
+        metavar=("START", "END"),
+        help="Start and end timestamps in ISO format",
     )
     sum_p.add_argument(
-        '--month', '-m',
-        type=int,
-        help='Month (1–12); only valid with --year'
+        "--month", "-m", type=int, help="Month (1–12); only valid with --year"
     )
     sum_p.add_argument(
-        '--export', '-e',
-        choices=['csv'],
-        help='Optional export to CSV'
+        "--export", "-e", choices=["csv"], help="Optional export to CSV"
     )
 
     # --- Budget management ---
-    budget_p = subparsers.add_parser(
-        'budget',
-        help='Manage budgets'
-    )
-    budget_sub = budget_p.add_subparsers(
-        dest='budget_command',
-        required=True
-    )
-    add_b = budget_sub.add_parser(
-        'add',
-        help='Add a new budget'
-    )
+    budget_p = subparsers.add_parser("budget", help="Manage budgets")
+    budget_sub = budget_p.add_subparsers(dest="budget_command", required=True)
+    add_b = budget_sub.add_parser("add", help="Add a new budget")
+    add_b.add_argument("-c", "--category", required=True, help="Category name")
     add_b.add_argument(
-        '-c', '--category',
-        required=True,
-        help='Category name'
-    )
-    add_b.add_argument(
-        '-l', '--limit',
-        required=True,
-        help='Budget limit (positive number)'
+        "-l", "--limit", required=True, help="Budget limit (positive number)"
     )
 
-    budget_sub.add_parser(
-        'list',
-        help='List all budgets'
-    )
+    budget_sub.add_parser("list", help="List all budgets")
 
     remove_b = budget_sub.add_parser(
-        'remove',
-        help='Remove a budget by category'
+        "remove", help="Remove a budget by category"
     )
     remove_b.add_argument(
-        '-c', '--category',
+        "-c",
+        "--category",
         required=True,
-        help='Category of the budget to remove'
+        help="Category of the budget to remove",
     )
 
     # Chart
     chart_p = subparsers.add_parser(
-        'chart',
-        help='Show income/expanses per category as ASCII and optional PNG/SVG'
+        "chart",
+        help="Show income/expanses per category as ASCII and optional PNG/SVG",
     )
     chart_p.add_argument(
-        '--start', '-s',
-        type=str, required=True,
-        help='Start date (YYYY-MM-DD)'
+        "--start",
+        "-s",
+        type=str,
+        required=True,
+        help="Start date (YYYY-MM-DD)",
     )
     chart_p.add_argument(
-        '--end', '-e',
-        type=str, required=True,
-        help='End date (YYYY-MM-DD)'
+        "--end", "-e", type=str, required=True, help="End date (YYYY-MM-DD)"
     )
     fmt_group = chart_p.add_mutually_exclusive_group()
     fmt_group.add_argument(
-        '--png', action='store_true',
-        help='Save chart as PNG'
+        "--png", action="store_true", help="Save chart as PNG"
     )
     fmt_group.add_argument(
-        '--svg', action='store_true',
-        help='Save Chart as SVG'
+        "--svg", action="store_true", help="Save Chart as SVG"
     )
 
     if argcomplete:
@@ -209,8 +173,8 @@ def main() -> int:
     ledger = Ledger(handler.get_all_transactions())
 
     # --- Budget management ---
-    if args.command == 'budget':
-        if args.budget_command == 'add':
+    if args.command == "budget":
+        if args.budget_command == "add":
             try:
                 limit = Decimal(args.limit)
                 # Reject NaN or infinite values
@@ -226,13 +190,13 @@ def main() -> int:
             except sqlite3.Error as e:
                 print(
                     f"Error adding budget '{args.category}': {e}",
-                    file=sys.stderr
+                    file=sys.stderr,
                 )
                 return 1
             print(f"Set budget: {budget.category} -> {budget.limit}")
             return 0
 
-        if args.budget_command == 'list':
+        if args.budget_command == "list":
             budgets = handler.get_budgets()
             if not budgets:
                 print("No budgets defined.")
@@ -241,30 +205,26 @@ def main() -> int:
                     print(f"{b.category}: {b.limit}")
             return 0
 
-        if args.budget_command == 'remove':
+        if args.budget_command == "remove":
             category = args.category
             try:
                 handler.remove_budget(category)
             except sqlite3.Error as e:
                 print(
-                    f"Error removing budget '{category}': {e}",
-                    file=sys.stderr
+                    f"Error removing budget '{category}': {e}", file=sys.stderr
                 )
                 return 1
             print(f"Removed budget for category '{category}'")
             return 0
 
     # --- Add transaction ---
-    if args.command == 'add':
+    if args.command == "add":
         # 1. Parse timestamp and handle errors
         if args.timestamp:
             try:
                 ts = Timestamp.from_isoformat(args.timestamp)
             except ValueError:
-                print(
-                    f"Invalid timestamp: {args.timestamp}",
-                    file=sys.stderr
-                )
+                print(f"Invalid timestamp: {args.timestamp}", file=sys.stderr)
                 return 1
         else:
             ts = Timestamp.now()
@@ -281,7 +241,7 @@ def main() -> int:
             timestamp=ts,
             category=args.category,
             amount=amt,
-            description=args.description
+            description=args.description,
         )
 
         # 4. Wrap DB access in try/except sqlite3.Error
@@ -317,7 +277,7 @@ def main() -> int:
         return 0
 
     # --- List transactions ---
-    if args.command == 'list':
+    if args.command == "list":
         # Retrieve all transactions
         txs = list(ledger)
         if not txs:
@@ -325,7 +285,7 @@ def main() -> int:
         else:
             # Limit to last N transactions if specified
             if args.limit is not None:
-                txs = txs[-args.limit:]
+                txs = txs[-args.limit :]
             # Reverse order if requested
             if args.reverse:
                 txs = list(reversed(txs))
@@ -334,30 +294,26 @@ def main() -> int:
         return 0
 
     # --- Remove transaction ---
-    if args.command == 'remove':
+    if args.command == "remove":
         tx_id = args.id
         try:
             deleted_tx = handler.remove_transaction(tx_id)
         except sqlite3.Error as e:
             print(
                 f"Error removing transaction from database: {e}",
-                file=sys.stderr
+                file=sys.stderr,
             )
             return 1
 
         if deleted_tx is None:
-            print(
-                f"No transaction with ID {tx_id} found.",
-                file=sys.stderr
-            )
+            print(f"No transaction with ID {tx_id} found.", file=sys.stderr)
             return 1
 
         try:
             ledger.remove_transaction(deleted_tx)
         except ValueError as e:
             print(
-                f"Error removing transaction from ledger: {e}",
-                file=sys.stderr
+                f"Error removing transaction from ledger: {e}", file=sys.stderr
             )
             return 1
 
@@ -365,7 +321,7 @@ def main() -> int:
         return 0
 
     # --- Show balance ---
-    if args.command == 'balance':
+    if args.command == "balance":
         bal = ledger.get_balance()
         inc = ledger.total_income()
         exp = ledger.total_expenses()
@@ -375,7 +331,7 @@ def main() -> int:
         return 0
 
     # --- Summary report ---
-    if args.command == 'summary':
+    if args.command == "summary":
         # custom range if provided
         if args.range:
             # parse both timestamps
@@ -388,14 +344,9 @@ def main() -> int:
 
             # compute range summary
             try:
-                data = ReportGenerator.range_summary(
-                    ledger, start_ts, end_ts
-                )
+                data = ReportGenerator.range_summary(ledger, start_ts, end_ts)
             except ValueError as e:
-                print(
-                    f"Error generating range summary: {e}",
-                    file=sys.stderr
-                )
+                print(f"Error generating range summary: {e}", file=sys.stderr)
                 return 1
 
             # use raw inputs for label
@@ -404,8 +355,7 @@ def main() -> int:
             # fall back to year/month summaries
             if args.year is None:
                 print(
-                    "Year is required when not using --range",
-                    file=sys.stderr
+                    "Year is required when not using --range", file=sys.stderr
                 )
                 return 1
 
@@ -417,9 +367,7 @@ def main() -> int:
                 label = f"{args.year}-{args.month:02d}"
             else:
                 # yearly summary
-                data = ReportGenerator.yearly_summary(
-                    ledger, args.year
-                )
+                data = ReportGenerator.yearly_summary(ledger, args.year)
                 label = str(args.year)
 
         # print results
@@ -427,34 +375,31 @@ def main() -> int:
             print(f"{label} {key.capitalize()}: {val}")
 
         # optional CSV export
-        if args.export == 'csv':
-            out = DATA_ROOT / 'processed' / f"summary_{label}.csv"
+        if args.export == "csv":
+            out = DATA_ROOT / "processed" / f"summary_{label}.csv"
             path = ReportGenerator.export_to_csv(data, out)
             print(f"Exported to: {path}")
         return 0
 
     # --- Show chart ---
-    if args.command == 'chart':
+    if args.command == "chart":
         try:
-            y1, m1, d1 = map(int, args.start.split('-'))
-            y2, m2, d2 = map(int, args.end.split('-'))
+            y1, m1, d1 = map(int, args.start.split("-"))
+            y2, m2, d2 = map(int, args.end.split("-"))
         except ValueError:
             print(
-                "Invalid date format, please use YYYY-MM-DD.",
-                file=sys.stderr
+                "Invalid date format, please use YYYY-MM-DD.", file=sys.stderr
             )
             return 1
 
         start_ts = Timestamp.from_components(y1, m1, d1)
-        end_ts = Timestamp.from_components(
-            y2, m2, d2, 23, 59, 59, 999_999
-        )
+        end_ts = Timestamp.from_components(y2, m2, d2, 23, 59, 59, 999_999)
 
         export_fmt: str | None = None
         if args.png:
-            export_fmt = 'png'
+            export_fmt = "png"
         elif args.svg:
-            export_fmt = 'svg'
+            export_fmt = "svg"
 
         generate_chart(ledger, start_ts, end_ts, export_fmt)
         return 0
@@ -462,5 +407,5 @@ def main() -> int:
     return 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

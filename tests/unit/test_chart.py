@@ -24,21 +24,11 @@ def sample_ledger() -> Ledger:
     ts = Timestamp.from_components(2025, 1, 1)
     # add one income
     ledger.add_transaction(
-        Transaction(
-            ts,
-            "salary",
-            Decimal("1000"),
-            "monthly salary"
-        )
+        Transaction(ts, "salary", Decimal("1000"), "monthly salary")
     )
     # add one expense
     ledger.add_transaction(
-        Transaction(
-            ts,
-            "groceries",
-            Decimal("-200"),
-            "weekly groceries"
-        )
+        Transaction(ts, "groceries", Decimal("-200"), "weekly groceries")
     )
     return ledger
 

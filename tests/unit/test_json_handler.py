@@ -113,6 +113,7 @@ def test_save_json_directory_creation_error(tmp_path, monkeypatch):
     # noinspection PyUnusedLocal
     def fake_create(dir_path, name, ext):
         raise OSError("cannot create dir")
+
     monkeypatch.setattr(FileHandler, "create_file", fake_create)
 
     with pytest.raises(OSError) as exc:
@@ -127,6 +128,7 @@ def test_save_json_write_error(tmp_path, monkeypatch):
     # noinspection PyUnusedLocal
     def fake_write(self, txt, encoding):
         raise OSError("disk full")
+
     monkeypatch.setattr(Path, "write_text", fake_write)
 
     with pytest.raises(OSError) as exc:

@@ -25,7 +25,7 @@ def generate_chart(
     ledger: Ledger,
     start: Timestamp,
     end: Timestamp,
-    export_format: str | None = None
+    export_format: str | None = None,
 ) -> None:
     """Generate an ASCII chart and optional graphical chart.
 
@@ -71,10 +71,7 @@ def generate_chart(
         )
 
 
-def _print_ascii_chart(
-    title: str,
-    data: Dict[str, Decimal]
-) -> None:
+def _print_ascii_chart(title: str, data: Dict[str, Decimal]) -> None:
     """Print a horizontal ASCII bar chart.
 
     Args:
@@ -96,7 +93,7 @@ def _export_graphical_chart(
     expenses: Dict[str, Decimal],
     start: Timestamp,
     end: Timestamp,
-    export_format: str
+    export_format: str,
 ) -> None:
     """Export bar chart using matplotlib.
 

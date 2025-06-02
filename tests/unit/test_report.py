@@ -30,32 +30,40 @@ def make_sample_ledger() -> Ledger:
     """
     ledger = Ledger()
     # May 2025: income and expense
-    ledger.add_transaction(Transaction(
-        timestamp=Timestamp.from_components(2025, 5, 1),
-        category="Salary",
-        amount=Decimal("1000.00"),
-        description="Monthly salary"
-    ))
-    ledger.add_transaction(Transaction(
-        timestamp=Timestamp.from_components(2025, 5, 15),
-        category="Groceries",
-        amount=Decimal("-200.50"),
-        description="Supermarkt"
-    ))
+    ledger.add_transaction(
+        Transaction(
+            timestamp=Timestamp.from_components(2025, 5, 1),
+            category="Salary",
+            amount=Decimal("1000.00"),
+            description="Monthly salary",
+        )
+    )
+    ledger.add_transaction(
+        Transaction(
+            timestamp=Timestamp.from_components(2025, 5, 15),
+            category="Groceries",
+            amount=Decimal("-200.50"),
+            description="Supermarkt",
+        )
+    )
     # June 2025: only income
-    ledger.add_transaction(Transaction(
-        timestamp=Timestamp.from_components(2025, 6, 10),
-        category="Freelance",
-        amount=Decimal("500.00"),
-        description="Projekt X"
-    ))
+    ledger.add_transaction(
+        Transaction(
+            timestamp=Timestamp.from_components(2025, 6, 10),
+            category="Freelance",
+            amount=Decimal("500.00"),
+            description="Projekt X",
+        )
+    )
     # May 2024: different year
-    ledger.add_transaction(Transaction(
-        timestamp=Timestamp.from_components(2024, 5, 20),
-        category="Gift",
-        amount=Decimal("150.00"),
-        description="Birthday gift"
-    ))
+    ledger.add_transaction(
+        Transaction(
+            timestamp=Timestamp.from_components(2024, 5, 20),
+            category="Gift",
+            amount=Decimal("150.00"),
+            description="Birthday gift",
+        )
+    )
     return ledger
 
 
@@ -157,12 +165,14 @@ def test_monthly_summary_february_leap_year() -> None:
     year (2024).
     """
     ledger = Ledger()
-    ledger.add_transaction(Transaction(
-        timestamp=Timestamp.from_components(2024, 2, 29),
-        category="LeapDay",
-        amount=Decimal("100.00"),
-        description="Leap day income"
-    ))
+    ledger.add_transaction(
+        Transaction(
+            timestamp=Timestamp.from_components(2024, 2, 29),
+            category="LeapDay",
+            amount=Decimal("100.00"),
+            description="Leap day income",
+        )
+    )
     summary = ReportGenerator.monthly_summary(ledger, year=2024, month=2)
 
     assert summary["income"] == Decimal("100.00")
@@ -177,19 +187,23 @@ def test_monthly_summary_february_non_leap_year() -> None:
     """
     ledger = Ledger()
     # Mitte Februar Ausgabe
-    ledger.add_transaction(Transaction(
-        timestamp=Timestamp.from_components(2025, 2, 15),
-        category="Expense",
-        amount=Decimal("-50.00"),
-        description="Mid-February expense"
-    ))
+    ledger.add_transaction(
+        Transaction(
+            timestamp=Timestamp.from_components(2025, 2, 15),
+            category="Expense",
+            amount=Decimal("-50.00"),
+            description="Mid-February expense",
+        )
+    )
     # Ende Februar Einnahme
-    ledger.add_transaction(Transaction(
-        timestamp=Timestamp.from_components(2025, 2, 28),
-        category="Income",
-        amount=Decimal("200.00"),
-        description="End-of-February income"
-    ))
+    ledger.add_transaction(
+        Transaction(
+            timestamp=Timestamp.from_components(2025, 2, 28),
+            category="Income",
+            amount=Decimal("200.00"),
+            description="End-of-February income",
+        )
+    )
     summary = ReportGenerator.monthly_summary(ledger, year=2025, month=2)
 
     assert summary["income"] == Decimal("200.00")

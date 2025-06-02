@@ -17,15 +17,17 @@ from budgetmanager.core.transaction import Transaction
 from budgetmanager.utils.timestamp import Timestamp
 
 
-def make_tx(year: int,
-            month: int,
-            day: int,
-            hour: int,
-            minute: int,
-            second: int,
-            category: str,
-            amount: str,
-            description: str) -> Transaction:
+def make_tx(
+    year: int,
+    month: int,
+    day: int,
+    hour: int,
+    minute: int,
+    second: int,
+    category: str,
+    amount: str,
+    description: str,
+) -> Transaction:
     """
     Helper to create a Transaction with ISO timestamp and Decimal amount.
 
@@ -59,9 +61,9 @@ def sample_transactions():
         list[Transaction]: A list of three sample transactions.
     """
     return [
-        make_tx(2025, 1, 1, 0, 0, 0, "income",  "100.00", "Salary"),
+        make_tx(2025, 1, 1, 0, 0, 0, "income", "100.00", "Salary"),
         make_tx(2025, 1, 2, 0, 0, 0, "expense", "-50.00", "Groceries"),
-        make_tx(2025, 1, 3, 0, 0, 0, "income",  "25.00",  "Gift"),
+        make_tx(2025, 1, 3, 0, 0, 0, "income", "25.00", "Gift"),
     ]
 
 

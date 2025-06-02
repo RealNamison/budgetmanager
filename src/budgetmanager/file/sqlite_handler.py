@@ -52,7 +52,7 @@ class SQLiteHandler:
         """
         conn = sqlite3.connect(
             self.db_path,
-            detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
+            detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
         )
         conn.row_factory = sqlite3.Row
         return conn
@@ -68,7 +68,8 @@ class SQLiteHandler:
             sqlite3.Error: On SQL errors.
         """
         # Transactions table
-        conn.execute("""
+        conn.execute(
+            """
             CREATE TABLE IF NOT EXISTS transactions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 timestamp TEXT NOT NULL,
@@ -76,15 +77,18 @@ class SQLiteHandler:
                 amount TEXT NOT NULL,
                 description TEXT
             )
-        """)
+        """
+        )
         # Budgets table
-        conn.execute("""
+        conn.execute(
+            """
             CREATE TABLE IF NOT EXISTS budgets (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 category TEXT UNIQUE NOT NULL,
                 limit_amount TEXT NOT NULL
             )
-        """)
+        """
+        )
         # Use PRAGMA for simple schema versioning if needed
         conn.execute("PRAGMA user_version = 1")
 
@@ -114,8 +118,8 @@ class SQLiteHandler:
                     tx.timestamp.to_isoformat(),
                     tx.category,
                     str(tx.amount),
-                    tx.description
-                )
+                    tx.description,
+                ),
             )
 
     def get_all_transactions(self) -> list[Transaction]:
@@ -131,9 +135,7 @@ class SQLiteHandler:
             >>> txs = handler.get_all_transactions()
         """
         with self._connect() as conn:
-            rows = conn.execute(
-                "SELECT * FROM transactions"
-            ).fetchall()
+            rows = conn.execute("SELECT * FROM transactions").fetchall()
 
         result: list[Transaction] = []
         for r in rows:
@@ -162,7 +164,7 @@ class SQLiteHandler:
             row = conn.execute(
                 "SELECT id, timestamp, category, amount, description "
                 "FROM transactions WHERE id = ?",
-                (tx_id,)
+                (tx_id,),
             ).fetchone()
             if row is None:
                 return None
@@ -171,13 +173,10 @@ class SQLiteHandler:
                 Timestamp.from_isoformat(row["timestamp"]),
                 row["category"],
                 Decimal(row["amount"]),
-                row["description"] or ""
+                row["description"] or "",
             )
 
-            conn.execute(
-                "DELETE FROM transactions WHERE id = ?",
-                (tx_id,)
-            )
+            conn.execute("DELETE FROM transactions WHERE id = ?", (tx_id,))
 
             return tx
 
@@ -200,24 +199,15 @@ class SQLiteHandler:
         insert_sql = (
             "INSERT INTO budgets (category, limit_amount) VALUES (?, ?)"
         )
-        update_sql = (
-            "UPDATE budgets SET limit_amount = ? WHERE category = ?"
-        )
+        update_sql = "UPDATE budgets SET limit_amount = ? WHERE category = ?"
         with self._connect() as conn:
             cursor = conn.execute(
-                "SELECT 1 FROM budgets WHERE category = ?",
-                (budget.category,)
+                "SELECT 1 FROM budgets WHERE category = ?", (budget.category,)
             )
             if cursor.fetchone():
-                conn.execute(
-                    update_sql,
-                    (str(budget.limit), budget.category)
-                )
+                conn.execute(update_sql, (str(budget.limit), budget.category))
             else:
-                conn.execute(
-                    insert_sql,
-                    (budget.category, str(budget.limit))
-                )
+                conn.execute(insert_sql, (budget.category, str(budget.limit)))
 
     def get_budgets(self) -> list[Budget]:
         """Load all budgets from the database.
@@ -233,9 +223,7 @@ class SQLiteHandler:
 
         result: list[Budget] = []
         for r in rows:
-            result.append(
-                Budget(r["category"], Decimal(r["limit_amount"]))
-            )
+            result.append(Budget(r["category"], Decimal(r["limit_amount"])))
         return result
 
     def remove_budget(self, category: str) -> None:
@@ -248,7 +236,4 @@ class SQLiteHandler:
             sqlite3.IntegrityError: If deletion violates constraints.
         """
         with self._connect() as conn:
-            conn.execute(
-                "DELETE FROM budgets WHERE category = ?",
-                (category,)
-            )
+            conn.execute("DELETE FROM budgets WHERE category = ?", (category,))

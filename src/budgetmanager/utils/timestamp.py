@@ -92,14 +92,14 @@ class Timestamp:
 
     @classmethod
     def from_components(
-            cls,
-            year: int,
-            month: int,
-            day: int,
-            hour: int = 0,
-            minute: int = 0,
-            second: int = 0,
-            microsecond: int = 0
+        cls,
+        year: int,
+        month: int,
+        day: int,
+        hour: int = 0,
+        minute: int = 0,
+        second: int = 0,
+        microsecond: int = 0,
     ) -> Timestamp:
         """
         Creates a Timestamp from individual date and time components.
@@ -227,9 +227,7 @@ class Timestamp:
             f"time({self.time.hour}, {self.time.minute}, "
             f"{self.time.second}, {self.time.microsecond})"
         )
-        return (
-            f"{self.__class__.__name__}(date={date_part}, time={time_part})"
-        )
+        return f"{self.__class__.__name__}(date={date_part}, time={time_part})"
 
     def __eq__(self, other: object) -> bool:
         """

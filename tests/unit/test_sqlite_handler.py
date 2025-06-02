@@ -20,9 +20,9 @@ def patch_create_directory(monkeypatch: pytest.MonkeyPatch) -> None:
     Disable actual directory creation in FileHandler to avoid FS side effects.
     """
     monkeypatch.setattr(
-        'budgetmanager.file.file_handler.FileHandler.create_directory',
+        "budgetmanager.file.file_handler.FileHandler.create_directory",
         lambda path: Path(path),
-        raising=True
+        raising=True,
     )
 
 
@@ -51,7 +51,7 @@ def test_add_and_get_transaction(handler: SQLiteHandler) -> None:
         timestamp=ts,
         category="test",
         amount=Decimal("9.99"),
-        description="Lunch"
+        description="Lunch",
     )
     handler.add_transaction(tx)
     txs = handler.get_all_transactions()

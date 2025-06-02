@@ -29,7 +29,7 @@ class Transaction:
         timestamp: Timestamp,
         category: str,
         amount: Decimal,
-        description: str
+        description: str,
     ) -> None:
         """Initialize a Transaction instance.
 
@@ -69,22 +69,24 @@ class Transaction:
 
     def __hash__(self) -> int:
         """Compute hash based on all immutable attributes."""
-        return hash((
-            self.timestamp.to_isoformat(),
-            self.category,
-            self.amount,
-            self.description,
-        ))
+        return hash(
+            (
+                self.timestamp.to_isoformat(),
+                self.category,
+                self.amount,
+                self.description,
+            )
+        )
 
     def __eq__(self, other: object) -> bool:
         """Check equality of two Transaction instances."""
         if not isinstance(other, Transaction):
             return NotImplemented
         return (
-            self.timestamp == other.timestamp and
-            self.category == other.category and
-            self.amount == other.amount and
-            self.description == other.description
+            self.timestamp == other.timestamp
+            and self.category == other.category
+            and self.amount == other.amount
+            and self.description == other.description
         )
 
     def __lt__(self, other: object) -> bool:
@@ -218,9 +220,7 @@ class Transaction:
             try:
                 factor = Decimal(str(other))
             except (InvalidOperation, ValueError) as e:
-                raise TypeError(
-                    f"Cannot convert {other!r} to Decimal"
-                ) from e
+                raise TypeError(f"Cannot convert {other!r} to Decimal") from e
             return self.amount * factor
 
         return NotImplemented

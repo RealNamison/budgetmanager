@@ -56,9 +56,7 @@ class FileHandler:
 
     @staticmethod
     def create_file(
-            directory_path: str,
-            file_name: str,
-            file_type: str
+        directory_path: str, file_name: str, file_type: str
     ) -> Path:
         """
         Creates an empty file with the specified name and type
@@ -83,13 +81,13 @@ class FileHandler:
                      with contextual info.
         """
         # Validate file_name using regex
-        if not re.match(r'^[A-Za-z0-9_-]+$', file_name):
+        if not re.match(r"^[A-Za-z0-9_-]+$", file_name):
             raise ValueError(
                 f"Invalid file_name '{file_name}': "
                 "must contain only letters, numbers, hyphens, or underscores"
             )
         # Validate file_type using regex
-        if not file_type or not re.match(r'^[A-Za-z0-9]+$', file_type):
+        if not file_type or not re.match(r"^[A-Za-z0-9]+$", file_type):
             raise ValueError(
                 f"Invalid file_type '{file_type}'"
                 ": must contain only letters and numbers and be non-empty"

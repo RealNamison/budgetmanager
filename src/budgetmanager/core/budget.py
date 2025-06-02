@@ -43,8 +43,10 @@ class Budget:
 
     def __repr__(self) -> str:
         """Unambiguous representation for debugging and testing."""
-        return f"{self.__class__.__name__}(" \
-               f"category={self.category!r}, limit={self.limit!r})"
+        return (
+            f"{self.__class__.__name__}("
+            f"category={self.category!r}, limit={self.limit!r})"
+        )
 
     def to_dict(self) -> dict[str, str]:
         """Serialize Budget to a JSON-friendly dict.

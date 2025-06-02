@@ -90,13 +90,9 @@ def test_cli_add_with_timestamp_and_description() -> None:
     'add' with -t and -d should use the correct timestamp and description.
     """
     ts = "2025-05-15T12:30:00"
-    res = run_cmd([
-        "add",
-        "-t", ts,
-        "-c", "tscat",
-        "-a", "15.00",
-        "-d", "sample desc"
-    ])
+    res = run_cmd(
+        ["add", "-t", ts, "-c", "tscat", "-a", "15.00", "-d", "sample desc"]
+    )
     assert res.returncode == 0
     assert f"Added: {ts}" in res.stdout
     assert "(sample desc)" in res.stdout
@@ -122,9 +118,11 @@ def test_cli_remove_transaction() -> None:
     run_cmd(["add", "-c", "remcat", "-a", "5.00"])
     # Directly query DB for ID
     import sqlite3
+
     conn = sqlite3.connect(str(config.DB_FILE))
-    cur = conn.execute("SELECT id FROM transactions WHERE category=?",
-                       ("remcat",))
+    cur = conn.execute(
+        "SELECT id FROM transactions WHERE category=?", ("remcat",)
+    )
     row = cur.fetchone()
     conn.close()
     assert row is not None
@@ -176,21 +174,11 @@ def test_cli_summary_monthly_and_yearly() -> None:
 def test_cli_chart_ascii_and_graphical_exports(tmp_path: Path) -> None:
     """Test 'chart' ASCII, PNG, and SVG export as well as error case."""
     # Seed some data
-    run_cmd([
-        "add", "-t", "2025-05-20T00:00:00",
-        "-c", "salary", "-a", "1000"
-    ])
-    run_cmd([
-        "add", "-t", "2025-05-20T00:00:00",
-        "-c", "rent", "-a", "-500"
-    ])
+    run_cmd(["add", "-t", "2025-05-20T00:00:00", "-c", "salary", "-a", "1000"])
+    run_cmd(["add", "-t", "2025-05-20T00:00:00", "-c", "rent", "-a", "-500"])
 
     # ASCII-only
-    res_a = run_cmd([
-        "chart",
-        "--start", "2025-01-01",
-        "--end",   "2026-01-01"
-    ])
+    res_a = run_cmd(["chart", "--start", "2025-01-01", "--end", "2026-01-01"])
     assert res_a.returncode == 0
     assert "Income:" in res_a.stdout
     assert "salary" in res_a.stdout
@@ -198,37 +186,35 @@ def test_cli_chart_ascii_and_graphical_exports(tmp_path: Path) -> None:
     assert "rent" in res_a.stdout
 
     # PNG export
-    res_png = run_cmd([
-        "chart",
-        "--start", "2025-01-01",
-        "--end",   "2026-01-01",
-        "--png"
-    ])
+    res_png = run_cmd(
+        ["chart", "--start", "2025-01-01", "--end", "2026-01-01", "--png"]
+    )
     assert res_png.returncode == 0
     assert "Graphical chart saved to:" in res_png.stdout
-    png_file = config.DATA_ROOT / "processed" / "charts" / (
-        "chart_2025-01-01_to_2026-01-01.png"
+    png_file = (
+        config.DATA_ROOT
+        / "processed"
+        / "charts"
+        / "chart_2025-01-01_to_2026-01-01.png"
     )
     assert png_file.exists()
 
     # SVG export
-    res_svg = run_cmd([
-        "chart",
-        "--start", "2025-01-01",
-        "--end",   "2026-01-01",
-        "--svg"
-    ])
+    res_svg = run_cmd(
+        ["chart", "--start", "2025-01-01", "--end", "2026-01-01", "--svg"]
+    )
     assert res_svg.returncode == 0
     assert "Graphical chart saved to:" in res_svg.stdout
-    svg_file = config.DATA_ROOT / "processed" / "charts" / (
-        "chart_2025-01-01_to_2026-01-01.svg"
+    svg_file = (
+        config.DATA_ROOT
+        / "processed"
+        / "charts"
+        / "chart_2025-01-01_to_2026-01-01.svg"
     )
     assert svg_file.exists()
 
     # Invalid date format
-    res_err = run_cmd([
-        "chart", "--start", "2025-13-01", "--end", "bad"
-    ])
+    res_err = run_cmd(["chart", "--start", "2025-13-01", "--end", "bad"])
     assert res_err.returncode == 1
     assert "Invalid date format" in res_err.stderr
 

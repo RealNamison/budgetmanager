@@ -14,11 +14,12 @@ from pathlib import Path
 from .file_handler import FileHandler
 
 import warnings
+
 warnings.warn(
     "JSONHandler is deprecated and will be removed in version 2; "
     "please use SQLite.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
 
@@ -60,14 +61,14 @@ class JSONHandler:
 
         # Attempt to open and parse JSON, with contextual exception handling
         try:
-            with file_path.open('r', encoding='utf-8') as f:
+            with file_path.open("r", encoding="utf-8") as f:
                 return json.load(f)
         except json.JSONDecodeError as e:
             # Provide context on JSON parsing error
             raise json.JSONDecodeError(
                 f"Failed to parse JSON file '{file_path}': {e.msg}",
                 e.doc,
-                e.pos
+                e.pos,
             ) from e
         except OSError as e:
             # Contextualize file opening errors
@@ -95,8 +96,7 @@ class JSONHandler:
         file_path: Path = FileHandler.get_file_path(*paths)
         try:
             FileHandler.create_file(
-                str(file_path.parent),
-                file_path.stem, "json"
+                str(file_path.parent), file_path.stem, "json"
             )
         except OSError as e:
             raise OSError(
@@ -105,7 +105,7 @@ class JSONHandler:
 
         json_str = json.dumps(data, indent=4)
         try:
-            file_path.write_text(json_str, encoding='utf-8')
+            file_path.write_text(json_str, encoding="utf-8")
         except OSError as e:
             raise OSError(
                 f"Failed to write JSON file '{file_path}': {e.strerror}"

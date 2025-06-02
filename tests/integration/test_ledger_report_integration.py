@@ -35,7 +35,7 @@ def test_monthly_and_yearly_summary(tmp_path: Path) -> None:
             timestamp=Timestamp.from_components(2025, 1, 10),
             category="inc",
             amount=Decimal("200"),
-            description=""
+            description="",
         )
     )
     ledger.add_transaction(
@@ -43,7 +43,7 @@ def test_monthly_and_yearly_summary(tmp_path: Path) -> None:
             timestamp=Timestamp.from_components(2025, 1, 20),
             category="exp",
             amount=Decimal("-50"),
-            description=""
+            description="",
         )
     )
     ledger.add_transaction(
@@ -51,7 +51,7 @@ def test_monthly_and_yearly_summary(tmp_path: Path) -> None:
             timestamp=Timestamp.from_components(2025, 2, 1),
             category="inc",
             amount=Decimal("100"),
-            description=""
+            description="",
         )
     )
 

@@ -88,44 +88,43 @@ def test_create_directory_error_when_file_exists(tmp_path: Path, monkeypatch):
     Test that create_directory raises OSError when
     a file exists at the target path.
     """
-    monkeypatch.setattr(config, 'DATA_ROOT', tmp_path)
-    conflict_path = tmp_path / 'conflict'
-    conflict_path.write_text('I am a file, not a directory')
+    monkeypatch.setattr(config, "DATA_ROOT", tmp_path)
+    conflict_path = tmp_path / "conflict"
+    conflict_path.write_text("I am a file, not a directory")
     with pytest.raises(OSError) as exc_info:
-        FileHandler.create_directory('conflict')
+        FileHandler.create_directory("conflict")
     msg = str(exc_info.value)
-    assert 'Failed to create directory' in msg
+    assert "Failed to create directory" in msg
     assert str(conflict_path) in msg
 
 
 def test_create_file_error_when_parent_is_file(tmp_path: Path, monkeypatch):
     """Test that create_file raises OSError when the parent path is a file."""
-    monkeypatch.setattr(config, 'DATA_ROOT', tmp_path)
-    parent_file = tmp_path / 'parent.txt'
-    parent_file.write_text('I am a file, not a directory')
+    monkeypatch.setattr(config, "DATA_ROOT", tmp_path)
+    parent_file = tmp_path / "parent.txt"
+    parent_file.write_text("I am a file, not a directory")
     with pytest.raises(OSError) as exc_info:
-        FileHandler.create_file('parent.txt', 'child', 'txt')
+        FileHandler.create_file("parent.txt", "child", "txt")
     msg = str(exc_info.value)
-    assert 'Cannot ensure directory exists for file' in msg
-    assert 'parent.txt' in msg
+    assert "Cannot ensure directory exists for file" in msg
+    assert "parent.txt" in msg
 
 
 def test_get_directory_path_absolute_ignores_data_root(
-        tmp_path: Path,
-        monkeypatch
+    tmp_path: Path, monkeypatch
 ):
     """Test get_directory_path returns the absolute path ignoring DATA_ROOT."""
-    monkeypatch.setattr(config, 'DATA_ROOT', tmp_path / 'will_not_be_used')
-    abs_path = tmp_path / 'abs' / 'dir'
-    result = FileHandler.get_directory_path(str(abs_path), 'ignored')
+    monkeypatch.setattr(config, "DATA_ROOT", tmp_path / "will_not_be_used")
+    abs_path = tmp_path / "abs" / "dir"
+    result = FileHandler.get_directory_path(str(abs_path), "ignored")
     assert result == abs_path
 
 
 def test_get_file_path_absolute_ignores_data_root(tmp_path: Path, monkeypatch):
     """Test get_file_path returns the absolute path ignoring DATA_ROOT."""
-    monkeypatch.setattr(config, 'DATA_ROOT', tmp_path / 'unused')
-    abs_path = tmp_path / 'some' / 'file.txt'
-    result = FileHandler.get_file_path(str(abs_path), 'ignored')
+    monkeypatch.setattr(config, "DATA_ROOT", tmp_path / "unused")
+    abs_path = tmp_path / "some" / "file.txt"
+    result = FileHandler.get_file_path(str(abs_path), "ignored")
     assert result == abs_path
 
 
