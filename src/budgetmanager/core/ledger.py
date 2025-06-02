@@ -155,8 +155,8 @@ class Ledger:
         Serialize the ledger to a dictionary suitable for JSON encoding.
 
         Returns:
-            dict[str, list[dict]]: A dictionary with a "transactions" key mapping
-                to a list of transaction dictionaries.
+            dict[str, list[dict]]: A dictionary with a "transactions" key
+                mapping to a list of transaction dictionaries.
 
         Examples:
             >>> data = ledger.to_dict()

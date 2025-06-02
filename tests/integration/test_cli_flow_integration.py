@@ -54,6 +54,7 @@ def test_cli_no_command() -> None:
     assert result.returncode != 0
     assert "usage: budgetmgr" in result.stderr
 
+
 def test_cli_list_empty() -> None:
     """
     The 'list' command without any transactions
