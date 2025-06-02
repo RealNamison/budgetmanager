@@ -285,7 +285,7 @@ def main() -> int:
         else:
             # Limit to last N transactions if specified
             if args.limit is not None:
-                txs = txs[-args.limit :]
+                txs = txs[-args.limit:]
             # Reverse order if requested
             if args.reverse:
                 txs = list(reversed(txs))
