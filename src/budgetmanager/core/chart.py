@@ -8,8 +8,6 @@ Uses matplotlib for graphical output and saves optional PNG/SVG
 under data/processed/charts/.
 """
 
-from __future__ import annotations
-
 from decimal import Decimal
 from pathlib import Path
 from typing import Dict, Set
