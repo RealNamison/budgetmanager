@@ -73,9 +73,11 @@ python_version = "3.10"
 check_untyped_defs = true
 strict_optional = true
 
-[tool.mypy."matplotlib.*"]
+[[tool.mypy.overrides]]
+module = "matplotlib.*"
 ignore_missing_imports = true
 
-[tool.mypy.argcomplete]
+[[tool.mypy.overrides]]
+module = "argcomplete"
 ignore_missing_imports = true
 # ─────────────────────────────────────────────────────────────────────────────

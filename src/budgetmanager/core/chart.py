@@ -117,8 +117,18 @@ def _export_graphical_chart(
     width = 0.35
 
     fig, ax = plt.subplots()
-    ax.bar([i - width / 2 for i in x], inc_vals, width, label="Income")
-    ax.bar([i + width / 2 for i in x], exp_vals, width, label="Expenses")
+    ax.bar(
+        [i - width / 2 for i in x],
+        inc_vals,
+        width,
+        label="Income",
+    )
+    ax.bar(
+        [i + width / 2 for i in x],
+        exp_vals,
+        width,
+        label="Expenses",
+    )
     ax.set_xticks(x)
     ax.set_xticklabels(cats, rotation=45, ha="right")
     ax.legend()
@@ -129,10 +139,10 @@ def _export_graphical_chart(
     start_str = start.to_isoformat().split("T")[0]
     end_str = end.to_isoformat().split("T")[0]
     filename = f"chart_{start_str}_to_{end_str}.{export_format}"
-    file_path = charts_dir / filename
+    file_path: Path = charts_dir / filename
 
     try:
-        fig.savefig(file_path)
+        fig.savefig(str(file_path))
         print(f"\nGraphical chart saved to: {file_path}")
     except Exception as e:
         raise OSError(f"Could not save chart: {e}") from e
