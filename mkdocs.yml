@@ -1,34 +1,21 @@
-site_name: BudgetManager Documentation
-site_description: A simple CLI tool to manage personal finances
-site_author: RealNamison
-repo_name: GitHub
-repo_url: https://github.com/RealNamison/budgetmanager
-
+site_name: BudgetManager
+site_description: Documentation for BudgetManager, a CLI tool for personal finance management.
 docs_dir: docs
 
 nav:
   - Home: index.md
-  - Quick Start: index.md#quick-start
-  - Installation: index.md#installation
-  - CLI Commands: index.md#cli-commands
-  - Configuration: index.md#configuration
-  - Data Storage: index.md#data-storage
-  - Reporting & Charts: index.md#reporting--charts
-  - Testing: index.md#testing
-  - License: index.md#license
-  - FAQ: index.md#faq
-  - Troubleshooting: index.md#troubleshooting
+  - Usage Guide: usage.md
+  - Reports: reports.md
+  - Project Structure: project_structure.txt
+  - Quickstart: quickstart.ipynb
 
 theme:
-  name: material
-  language: en
+  name: mkdocs
+  # Customization can be added here, such as palette or font
 
 markdown_extensions:
+  - admonition
   - toc:
       permalink: true
-  - admonition
-  - footnotes
-  - pymdownx.superfences
-
-plugins:
-  - search
+  - tables
+  - fenced_code

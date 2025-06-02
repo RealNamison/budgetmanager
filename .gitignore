@@ -5,3 +5,4 @@ __pycache__/
 data/
 build/
 src/budgetmanager.egg-info/
+docs/dev-guidelines/
