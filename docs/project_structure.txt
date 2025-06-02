@@ -1,13 +1,19 @@
 budgetmanager/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── data/
 │   ├── processed/
 │   │   ├── charts/
+│   │   │   └── chart_2025-05-01_to_2025-05-20.png
+│   │   ├── budget.db
 │   │   ├── budgets.json
-│   │   └── ledger.json
+│   │   ├── ledger.json
+│   │   └── summary_2025.csv
 │   └── raw/
 ├── docs/
 │   ├── index.md
-│   ├── project_structure.md
+│   ├── project_structure.txt
 │   ├── reports.md
 │   └── usage.md
 ├── examples/
