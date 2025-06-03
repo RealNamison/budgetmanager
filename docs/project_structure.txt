@@ -36,6 +36,17 @@ budgetmanager/
 │       │   ├── file_handler.py
 │       │   ├── json_handler.py
 │       │   └── sqlite_handler.py
+│       ├── gui/
+│       │   ├── controllers/
+│       │   │   ├── __init__.py
+│       │   │   └── transaction_controller.py
+│       │   ├── views/
+│       │   │   ├── __init__.py
+│       │   │   ├── main_window.py
+│       │   │   └── transaction_view.py
+│       │   ├── __init__.py
+│       │   ├── base.py
+│       │   └── tkinter_app.py
 │       ├── utils/
 │       │   ├── __init__.py
 │       │   └── timestamp.py

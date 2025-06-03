@@ -32,6 +32,7 @@ classifiers = [
 
 [project.scripts]
 budgetmgr = "budgetmanager.cli.cli:main"
+budgetmgr-gui = "budgetmanager.gui.tkinter_app:main"
 # ─────────────────────────────────────────────────────────────────────────────
 
 [project.optional-dependencies]
