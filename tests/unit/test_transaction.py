@@ -40,7 +40,9 @@ def test_repr_contains_class_and_fields(txn):
 def test_str_format(txn, sample_ts):
     """__str__ must match '<ISO> | category: amount (description)'."""
     expected = (
-        f"{sample_ts.to_isoformat()} | salary: 1000.00 " f"(Monthly salary)"
+        f"[# - ] | {sample_ts.to_isoformat()}"
+        " | salary: 1000.00 "
+        f"(Monthly salary)"
     )
     assert str(txn) == expected
 

@@ -77,7 +77,7 @@ class SQLiteHandler:
                 amount TEXT NOT NULL,
                 description TEXT
             )
-        """
+            """
         )
         # Budgets table
         conn.execute(
@@ -87,13 +87,13 @@ class SQLiteHandler:
                 category TEXT UNIQUE NOT NULL,
                 limit_amount TEXT NOT NULL
             )
-        """
+            """
         )
         # Use PRAGMA for simple schema versioning if needed
         conn.execute("PRAGMA user_version = 1")
 
     def add_transaction(self, tx: Transaction) -> None:
-        """Insert a Transaction into the database.
+        """Insert a Transaction into the database and set its transaction_id.
 
         Args:
             tx (Transaction): Transaction to persist.
@@ -112,7 +112,7 @@ class SQLiteHandler:
             "VALUES (?, ?, ?, ?)"
         )
         with self._connect() as conn:
-            conn.execute(
+            cursor = conn.execute(
                 sql,
                 (
                     tx.timestamp.to_isoformat(),
@@ -121,6 +121,8 @@ class SQLiteHandler:
                     tx.description,
                 ),
             )
+
+            tx.transaction_id = cursor.lastrowid
 
     def get_all_transactions(self) -> list[Transaction]:
         """Load all transactions from the database.
@@ -142,7 +144,13 @@ class SQLiteHandler:
             ts = Timestamp.from_isoformat(r["timestamp"])
             amt = Decimal(r["amount"])
             result.append(
-                Transaction(ts, r["category"], amt, r["description"])
+                Transaction(
+                    timestamp=ts,
+                    category=r["category"],
+                    amount=amt,
+                    description=r["description"] or "",
+                    transaction_id=r["id"],
+                )
             )
         return result
 
@@ -170,14 +178,14 @@ class SQLiteHandler:
                 return None
 
             tx = Transaction(
-                Timestamp.from_isoformat(row["timestamp"]),
-                row["category"],
-                Decimal(row["amount"]),
-                row["description"] or "",
+                timestamp=Timestamp.from_isoformat(row["timestamp"]),
+                category=row["category"],
+                amount=Decimal(row["amount"]),
+                description=row["description"] or "",
+                transaction_id=row["id"],
             )
 
             conn.execute("DELETE FROM transactions WHERE id = ?", (tx_id,))
-
             return tx
 
     def add_budget(self, budget: Budget) -> None:

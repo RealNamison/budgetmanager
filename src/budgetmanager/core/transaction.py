@@ -4,7 +4,8 @@
 Transaction module for budget entries.
 
 This module defines the `Transaction` class, which represents a single
-financial transaction with timestamp, category, amount and description.
+financial transaction with an optional transaction_id, timestamp, category,
+amount and description.
 """
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ class Transaction:
     """Represents a financial transaction.
 
     Attributes:
+        transaction_id (int | None): Optional database ID of the transaction.
         timestamp (Timestamp): Date and time of the transaction.
         category (str): Category or tag of the transaction.
         amount (Decimal): Positive for income, negative for expense.
@@ -30,6 +32,7 @@ class Transaction:
         category: str,
         amount: Decimal,
         description: str,
+        transaction_id: int | None = None,
     ) -> None:
         """Initialize a Transaction instance.
 
@@ -38,7 +41,10 @@ class Transaction:
             category (str): Category or tag of the transaction.
             amount (Decimal): Positive for income, negative for expense.
             description (str): Short human-readable description.
+            transaction_id (int | None): Optional database ID.
+                Defaults to None.
         """
+        self.transaction_id = transaction_id
         self.timestamp = timestamp
         self.category = category
         self.amount = amount
@@ -48,6 +54,7 @@ class Transaction:
         """Return unambiguous representation of Transaction."""
         return (
             "Transaction("
+            f"transaction_id={self.transaction_id!r}, "
             f"timestamp={self.timestamp!r}, "
             f"category={self.category!r}, "
             f"amount={self.amount!r}, "
@@ -57,8 +64,13 @@ class Transaction:
 
     def __str__(self) -> str:
         """Return user-friendly string representation."""
+        id_part = (
+            f"[#{self.transaction_id}] | "
+            if self.transaction_id is not None
+            else "[# - ] | "
+        )
         return (
-            f"{self.timestamp.to_isoformat()} | "
+            f"{id_part}{self.timestamp.to_isoformat()} | "
             f"{self.category}: {self.amount} "
             f"({self.description})"
         )
@@ -71,6 +83,7 @@ class Transaction:
         """Compute hash based on all immutable attributes."""
         return hash(
             (
+                self.transaction_id,
                 self.timestamp.to_isoformat(),
                 self.category,
                 self.amount,
@@ -83,7 +96,8 @@ class Transaction:
         if not isinstance(other, Transaction):
             return NotImplemented
         return (
-            self.timestamp == other.timestamp
+            self.transaction_id == other.transaction_id
+            and self.timestamp == other.timestamp
             and self.category == other.category
             and self.amount == other.amount
             and self.description == other.description
@@ -170,7 +184,6 @@ class Transaction:
                 raise TypeError(f"Cannot convert {other!r} to Decimal") from e
             return self.amount - scalar
 
-        # anderer Typ nicht unterstützt
         return NotImplemented
 
     def __rsub__(self, other: Any) -> Decimal:
@@ -288,30 +301,35 @@ class Transaction:
 
         return NotImplemented
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize Transaction to a dict with JSON-friendly types.
 
         Returns:
             dict: {
+                "transaction_id": int | None,
                 "timestamp": str (ISO format),
                 "category": str,
                 "amount": str,
                 "description": str
             }
         """
-        return {
+        output: dict[str, Any] = {
             "timestamp": self.timestamp.to_isoformat(),
             "category": self.category,
             "amount": str(self.amount),
             "description": self.description,
         }
+        if self.transaction_id is not None:
+            output["transaction_id"] = self.transaction_id
+        return output
 
     @classmethod
-    def from_dict(cls, data: dict) -> Transaction:
+    def from_dict(cls, data: dict[str, Any]) -> Transaction:
         """Create Transaction from dict produced by `to_dict`.
 
         Args:
             data (dict): {
+                "transaction_id": int | None (optional),
                 "timestamp": str (ISO format),
                 "category": str,
                 "amount": str or Decimal,
@@ -323,8 +341,21 @@ class Transaction:
 
         Raises:
             KeyError: If a required key is missing.
-            ValueError: If timestamp or amount cannot be parsed.
+            ValueError: If timestamp, amount or transaction_id
+                cannot be parsed.
         """
+        # transaction_id parsing (optional)
+        tx_id: int | None
+        if "transaction_id" in data:
+            try:
+                tx_id = int(data["transaction_id"])
+            except (TypeError, ValueError) as e:
+                raise ValueError(
+                    f"Invalid transaction_id: {data.get('transaction_id')}"
+                ) from e
+        else:
+            tx_id = None
+
         # Timestamp parsing
         try:
             ts = Timestamp.from_isoformat(data["timestamp"])
@@ -336,9 +367,9 @@ class Transaction:
         # Amount parsing
         try:
             amt = (
-                Decimal(data["amount"])
-                if not isinstance(data["amount"], Decimal)
-                else data["amount"]
+                data["amount"]
+                if isinstance(data["amount"], Decimal)
+                else Decimal(data["amount"])
             )
         except (InvalidOperation, TypeError) as e:
             raise ValueError(f"Invalid amount: {data.get('amount')}") from e
@@ -348,6 +379,7 @@ class Transaction:
             category=data["category"],
             amount=amt,
             description=data["description"],
+            transaction_id=tx_id,
         )
 
     def is_income(self) -> bool:

@@ -94,7 +94,7 @@ def test_cli_add_with_timestamp_and_description() -> None:
         ["add", "-t", ts, "-c", "tscat", "-a", "15.00", "-d", "sample desc"]
     )
     assert res.returncode == 0
-    assert f"Added: {ts}" in res.stdout
+    assert ts in res.stdout
     assert "(sample desc)" in res.stdout
 
 
